@@ -59,7 +59,9 @@ jobs:
     # The explorer and explorer-pr environments should contain the same secrets. The explorer
     # environment runs automatically and is used for trusted code: pushes, same-repo PRs, and fork
     # PRs whose author and actor both have write access (see the authorize job). The explorer-pr
-    # environment requires approval and is used for all other fork PRs.
+    # environment requires approval and is used for all other fork PRs. Its required reviewers are
+    # what stops an untrusted fork PR's code from running with SYNAPSE_AUTH_TOKEN, so they must
+    # not be removed.
     environment: ${{ github.event_name == 'pull_request_target' &&
       github.event.pull_request.head.repo.full_name != github.repository &&
       needs.authorize.outputs.authorized != 'true' &&
@@ -67,18 +69,21 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare
           # against.
           fetch-depth: 0
           persist-credentials: false
-          # By default, actions/checkout@v4 will checkout the main branch instead of the merge
-          # commit when when using pull_request_target. It is currently difficult to checkout the
-          # merge commit in this context. The current solution is to checkout the PR HEAD instead
-          # and enable the branch protection rule "Require branches to be up to date before
-          # merging".
+          # Under pull_request_target, checkout defaults to the base branch, and checking out the
+          # merge commit is difficult. For fork PRs we check out the PR HEAD instead and rely on the
+          # branch protection rule "Require branches to be up to date before merging".
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.pull_request.head.sha || github.ref }}
+          # The e2e tests build and run the fork PR's code with SYNAPSE_AUTH_TOKEN, which checkout
+          # refuses under pull_request_target unless opted in. Fork PR runs are gated by the
+          # required reviewers on the <explorer>-pr environments, which only authors and actors
+          # with write access skip (see the authorize job).
+          allow-unsafe-pr-checkout: true
 
       - name:
           Switch from the detached HEAD of the merge commit to a new branch
