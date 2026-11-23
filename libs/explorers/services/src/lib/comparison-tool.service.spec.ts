@@ -3504,46 +3504,6 @@ describe('ComparisonToolService', () => {
       expect(service.selectedRowId()).toBe('row-2');
     }));
 
-    it('notifySelectedRowValidity(false) resets to the first unpinned row', () => {
-      connectService();
-      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
-      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }, { _id: 'row-2' }], totalCount: 2 }));
-      service.selectRow('row-2');
-      service.notifySelectedRowValidity(false);
-      expect(service.selectedRowId()).toBe('row-1');
-    });
-
-    it('notifySelectedRowValidity(false) selects nothing when there are no unpinned rows', () => {
-      connectService();
-      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
-      service.setPinnedItems(['pinned-1']);
-      service.fetchPinned(of({ data: [{ _id: 'pinned-1' }], totalCount: 1 }));
-      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
-      service.fetchUnpinned(of({ data: [], totalCount: 0 }));
-      service.notifySelectedRowValidity(false);
-      expect(service.selectedRowId()).toBeNull();
-    });
-
-    it('notifySelectedRowValidity(false) is a no-op when selected row is in pinned data', () => {
-      connectService();
-      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
-      service.setPinnedItems(['pinned-1']);
-      service.fetchPinned(of({ data: [{ _id: 'pinned-1' }], totalCount: 1 }));
-      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
-      service.selectRow('pinned-1');
-      service.notifySelectedRowValidity(false);
-      expect(service.selectedRowId()).toBe('pinned-1');
-    });
-
-    it('notifySelectedRowValidity(true) is a no-op', () => {
-      connectService();
-      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
-      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
-      service.selectRow('row-1');
-      service.notifySelectedRowValidity(true);
-      expect(service.selectedRowId()).toBe('row-1');
-    });
-
     describe('selectedRowIdForUnpinnedFetch', () => {
       const connectWithRows = () => {
         connectService();
@@ -3681,18 +3641,40 @@ describe('ComparisonToolService', () => {
         });
       });
 
+      it('keeps a pinned selection when the lookup says it is not in the results', () => {
+        connectService();
+        service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+        service.setPinnedItems(['pinned-1']);
+        service.fetchPinned(of({ data: [{ _id: 'pinned-1' }], totalCount: 1 }));
+        service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
+        service.selectRow('pinned-1');
+        service.fetchUnpinned(
+          of({
+            data: [{ _id: 'row-1' }],
+            totalCount: 1,
+            selectedRowLookup: { rowId: 'pinned-1', inResults: false },
+          }),
+        );
+        expect(service.selectedRowId()).toBe('pinned-1');
+      });
+
+      it('ignores the lookup when row selection is off', () => {
+        connectService();
+        service.fetchUnpinned(
+          of({
+            data: [{ _id: 'row-1' }],
+            totalCount: 1,
+            selectedRowLookup: { rowId: 'row-9', inResults: false },
+          }),
+        );
+        expect(service.selectedRowId()).toBeNull();
+      });
+
       it('keeps the selection when the fetch carries no lookup', () => {
         selectRow2();
         service.fetchUnpinned(of({ data: [{ _id: 'row-3' }], totalCount: 1 }));
         expect(service.selectedRowId()).toBe('row-2');
       });
-    });
-
-    it('notifySelectedRowValidity() is a no-op when rowSelectionEnabled is false', () => {
-      connectService();
-      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
-      service.notifySelectedRowValidity(false);
-      expect(service.selectedRowId()).toBeNull();
     });
   });
 

@@ -1420,10 +1420,11 @@ export class ComparisonToolService<T> {
     this.hoveredRowIdSignal.set(id);
   }
 
-  /** Call after a filtered fetch to report whether the selected row exists in the full result set.
-   * If not, keeps a pinned selection, otherwise selects the first unpinned row, or nothing when
-   * there is none */
-  notifySelectedRowValidity(isInResults: boolean): void {
+  /**
+   * Acts on the unpinned fetch's answer about the selected row. If it isn't in the results, keeps a
+   * pinned selection, otherwise selects the first unpinned row, or nothing when there is none.
+   */
+  private notifySelectedRowValidity(isInResults: boolean): void {
     if (!this.viewConfig().rowSelectionEnabled) return;
     if (isInResults) return;
 
