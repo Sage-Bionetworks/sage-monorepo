@@ -1,0 +1,39 @@
+<div class="legend-group legend-locus-browser">
+  <h2 class="legend-title">{{ locusBrowserTitle }}</h2>
+  @for (section of sections; track section.title; let sectionIndex = $index) {
+    <h3 [id]="'legend-section-title-' + sectionIndex" class="legend-section-title">
+      {{ section.title }}
+    </h3>
+    <ul class="legend-items" [attr.aria-labelledby]="'legend-section-title-' + sectionIndex">
+      @for (item of section.items; track item.label) {
+        <li class="legend-item">
+          @if (item.kind === 'track') {
+            <span [class]="'legend-glyph legend-glyph-' + item.glyph" aria-hidden="true">
+              <span class="legend-glyph-track"></span>
+              @if (item.glyph !== 'intron') {
+                <span class="legend-glyph-mark">
+                  @if (item.glyph === 'multiple-variants') {
+                    {{ multipleVariantsExampleCount }}
+                  }
+                </span>
+              }
+            </span>
+          } @else {
+            <img class="legend-glyph" [src]="item.imagePath" alt="" />
+          }
+          <span>{{ item.label }}</span>
+        </li>
+      }
+    </ul>
+  }
+</div>
+
+<div class="legend-group legend-cell-classes">
+  <h2 class="legend-title">{{ cellClassesTitle }}</h2>
+  <explorers-simple-table
+    class="legend-cell-class-table"
+    [ariaLabel]="cellClassesTitle"
+    [columns]="cellClassColumns"
+    [rows]="cellClassRows"
+  />
+</div>

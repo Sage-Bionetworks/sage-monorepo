@@ -26,6 +26,7 @@ import {
 import { render, screen } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
+import { SIDEBAR_TABS } from './components/sidebar/sidebar.component';
 import { EqtlComparisonToolComponent } from './eqtl-comparison-tool.component';
 import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.service';
 
@@ -271,8 +272,8 @@ describe('EqtlComparisonToolComponent', () => {
     expect(screen.getByText('variant:')).toBeInTheDocument();
     expect(screen.getByText('gene:')).toBeInTheDocument();
     expect(screen.getByText('cell class:')).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'Impact' })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'Traits' })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'Resources' })).toBeInTheDocument();
+    SIDEBAR_TABS.forEach(({ label }) => {
+      expect(screen.getByRole('tab', { name: label })).toBeInTheDocument();
+    });
   });
 });
