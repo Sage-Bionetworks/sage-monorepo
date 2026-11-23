@@ -32,7 +32,7 @@ export class LegendComponent {
   ];
 
   protected readonly cellClassRows: SimpleTableCell[][] = Object.values(CELL_CLASSES)
-    .toSorted((a, b) => a.name.localeCompare(b.name))
+    .toSorted((a, b) => a.short.localeCompare(b.short))
     .map(({ name, short, color }) => [
       { type: 'swatch', color, text: short },
       { type: 'text', value: name },

@@ -8,7 +8,7 @@ import {
   LEGEND_SECTIONS,
 } from './legend.constants';
 
-const ALPHABETICAL_CELL_CLASS_IDS: CellClassId[] = [
+const CELL_CLASS_IDS_BY_ABBREVIATION: CellClassId[] = [
   'class_astro',
   'class_en',
   'class_immune',
@@ -48,7 +48,7 @@ describe('LegendComponent', () => {
     expect(columnHeaders.map((header) => header?.trim())).toEqual([...LEGEND_CELL_CLASS_COLUMNS]);
   });
 
-  it('lists every cell class alphabetically, by abbreviation and full name', async () => {
+  it('lists every cell class sorted alphabetically by abbreviation', async () => {
     await render(LegendComponent);
     const rowCells = getCellClassBodyRows().map((row) =>
       within(row)
@@ -56,7 +56,7 @@ describe('LegendComponent', () => {
         .map((cell) => cell.textContent?.trim()),
     );
     expect(rowCells).toEqual(
-      ALPHABETICAL_CELL_CLASS_IDS.map((id) => [CELL_CLASSES[id].short, CELL_CLASSES[id].name]),
+      CELL_CLASS_IDS_BY_ABBREVIATION.map((id) => [CELL_CLASSES[id].short, CELL_CLASSES[id].name]),
     );
   });
 
