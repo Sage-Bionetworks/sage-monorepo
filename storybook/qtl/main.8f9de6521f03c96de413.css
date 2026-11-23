@@ -287,11 +287,16 @@ body {
   --color-primary: #2c5182;
   --color-secondary: #2c5182;
   --color-action-primary: #2c5182;
+  --color-accent-blue-300: #a5c7f3;
   --color-accent-green-600: #388c95;
   --color-accent-lavender-600: #6e76ae;
-  --color-browser-exon: #a5c7f3;
+  --color-variant: #469da0;
   --color-variant-muted: #c8e6e9;
+  --color-gene-in-results: #adc7e7;
+  --color-gene-selected: #437dc8;
   --color-gene-muted: #d9e5f4;
+  --color-exon: #f2d7a1;
+  --color-utr: #d8a5f3;
   --color-gold: #d7ae0c;
   --color-chiclet-green: #1aa582;
   --color-chiclet-blue: #3f51b5;
