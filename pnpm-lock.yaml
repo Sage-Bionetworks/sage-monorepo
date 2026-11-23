@@ -7,7 +7,7 @@ settings:
 overrides:
   axios: 1.18.1
   basic-ftp: 6.0.1
-  caniuse-lite: 1.0.30001777
+  caniuse-lite: 1.0.30001826
   cross-spawn: 7.0.6
   fast-xml-parser: 5.8.0
   form-data: 4.0.6
@@ -6774,8 +6774,8 @@ packages:
   caniuse-api@3.0.0:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
 
-  caniuse-lite@1.0.30001777:
-    resolution: {integrity: sha512-tmN+fJxroPndC74efCdp12j+0rk0RHwV5Jwa1zWaFVyw2ZxAuPeG8ZgWC3Wz7uSjT3qMRQ5XHZ4COgQmsCMJAQ==}
+  caniuse-lite@1.0.30001826:
+    resolution: {integrity: sha512-wTB+9tIbLro/BCXwLuNV1meHE4L9dS6dArMDwgYfNBPMYScqClHyGunhkCSDtHhe/69Xl0sHlKgBVZ+fNsYtWA==}
 
   canvas@3.1.0:
     resolution: {integrity: sha512-tTj3CqqukVJ9NgSahykNwtGda7V33VLObwrHfzT0vqJXu7J4d4C/7kQQW3fOEGDfZZoILPut5H00gOjyttPGyg==}
@@ -16817,7 +16817,7 @@ snapshots:
   '@modern-js/utils@2.68.2':
     dependencies:
       '@swc/helpers': 0.5.17
-      caniuse-lite: 1.0.30001777
+      caniuse-lite: 1.0.30001826
       lodash: 4.17.21
       rslog: 1.3.2
 
@@ -21028,7 +21028,7 @@ snapshots:
   autoprefixer@10.4.21(postcss@8.5.23):
     dependencies:
       browserslist: 4.28.2
-      caniuse-lite: 1.0.30001777
+      caniuse-lite: 1.0.30001826
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.1.1
@@ -21038,7 +21038,7 @@ snapshots:
   autoprefixer@10.5.0(postcss@8.4.38):
     dependencies:
       browserslist: 4.28.2
-      caniuse-lite: 1.0.30001777
+      caniuse-lite: 1.0.30001826
       fraction.js: 5.3.4
       picocolors: 1.1.1
       postcss: 8.4.38
@@ -21345,7 +21345,7 @@ snapshots:
   browserslist@4.28.2:
     dependencies:
       baseline-browser-mapping: 2.10.33
-      caniuse-lite: 1.0.30001777
+      caniuse-lite: 1.0.30001826
       electron-to-chromium: 1.5.366
       node-releases: 2.0.47
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
@@ -21433,11 +21433,11 @@ snapshots:
   caniuse-api@3.0.0:
     dependencies:
       browserslist: 4.28.2
-      caniuse-lite: 1.0.30001777
+      caniuse-lite: 1.0.30001826
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
-  caniuse-lite@1.0.30001777: {}
+  caniuse-lite@1.0.30001826: {}
 
   canvas@3.1.0:
     dependencies:
