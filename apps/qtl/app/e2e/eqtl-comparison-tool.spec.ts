@@ -1,15 +1,22 @@
 import { expect, Page, test } from '@playwright/test';
-import { MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
+import { DEFAULT_PAGE_SIZE, MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
 import {
+  clickRowByName,
+  closeTutorialDialog,
   ColumnConfig,
   expectPinnedParams,
+  expectSelectedRow,
+  getHoveredRows,
   getPinnedTable,
   getQueryParamsFromRecords,
   getRowByName,
+  getSelectedRows,
   getUnpinnedTable,
+  hoverRowByName,
   openFilterMenuAndClickCheckbox,
   pinByName,
   runFilterPanelTests,
+  STANDARD_NO_RESULTS_MESSAGE,
   STANDARD_PIN_LIMIT_COPY,
   testClickColumnTogglesSortOrder,
   testClickColumnUpdatesSortUrl,
@@ -43,9 +50,79 @@ const CELL_SUBCLASS_FILTER = {
   value: 'Astrocyte',
 };
 
-const filterByCellClass = async (page: Page) => {
-  await openFilterMenuAndClickCheckbox(page, CELL_CLASS_FILTER.menuName, CELL_CLASS_FILTER.value);
+// Neither shares a cell class with CELL_CLASS_FILTER's Astrocyte rows, and no sample row is an
+// Immune Cell
+const EXCITATORY_NEURON_CELL_CLASS = 'Excitatory Neuron';
+const IMMUNE_CELL_CLASS = 'Immune Cell';
+
+const EQTLS_PATH = '/comparison-tools/eqtl';
+
+const isEqtlsRequest = (url: URL, itemFilterType: 'include' | 'exclude') =>
+  url.pathname.endsWith(EQTLS_PATH) && url.searchParams.get('itemFilterType') === itemFilterType;
+
+// Holds the pinned rows request that an unpin sends until the results request sent with it has
+// answered, so the results always land first. That results request is the one whose pins no longer
+// include the unpinned row. Returns a count of the held requests, to prove the route matched.
+const holdPinnedRowsUntilResultsLand = async (page: Page, unpinnedId: string) => {
+  const resultsLanded = page.waitForResponse((response) => {
+    const url = new URL(response.url());
+    return (
+      isEqtlsRequest(url, 'exclude') &&
+      !url.searchParams.getAll('items').join(',').split(',').includes(unpinnedId)
+    );
+  });
+  let heldRequests = 0;
+  await page.route(
+    (url) => isEqtlsRequest(url, 'include'),
+    async (route) => {
+      heldRequests++;
+      await resultsLanded;
+      await route.continue();
+    },
+  );
+  return () => heldRequests;
+};
+
+// Pins the first result and an Astrocyte row, and selects the Astrocyte one
+const pinTwoAndSelectAstrocyte = async (page: Page) => {
+  const astrocyte = await findAstrocyteNotSelectedByDefault(page);
+  const [first] = await fetchFirstPage(page);
+  await navigateToEqtlComparison(page, true);
+  for (const eqtl of [first, astrocyte]) {
+    await pinByName(getUnpinnedTable(page), page, eqtl.composite_id);
+    await expect(getRowByName(getPinnedTable(page), page, eqtl.composite_id)).toHaveCount(1);
+  }
+  await clickRowByName(getPinnedTable(page), page, astrocyte.composite_id);
+  await expectSelectedRow(page, astrocyte.composite_id);
+  return astrocyte;
+};
+
+const filterByCellClassValue = async (page: Page, value: string) => {
+  await openFilterMenuAndClickCheckbox(page, CELL_CLASS_FILTER.menuName, value);
   await toggleFilterPanel(page);
+};
+
+const filterByCellClass = (page: Page) => filterByCellClassValue(page, CELL_CLASS_FILTER.value);
+
+const fetchEqtlsInCellClass = (page: Page, value: string) =>
+  fetchEqtls(page, {}, { [CELL_CLASS_FILTER.queryParamKey]: [value] });
+
+// The rows on the first page of results, in the default sort
+const fetchFirstPage = async (page: Page) => (await fetchEqtls(page)).slice(0, DEFAULT_PAGE_SIZE);
+
+// A first-page Astrocyte row that is neither of the first two results nor the first Astrocyte
+// result, so a wrongly reset selection can't land on it by chance, even with the first result pinned
+const findAstrocyteNotSelectedByDefault = async (page: Page) => {
+  const [firstAstrocyte] = await fetchEqtlsInCellClass(page, CELL_CLASS_FILTER.value);
+  const astrocyte = (await fetchFirstPage(page))
+    .slice(2)
+    .find(
+      (eqtl) =>
+        eqtl.cell_class === CELL_CLASS_FILTER.value &&
+        eqtl.composite_id !== firstAstrocyte.composite_id,
+    );
+  expect(astrocyte).toBeDefined();
+  return astrocyte as NonNullable<typeof astrocyte>;
 };
 
 test.describe('eQTL comparison tool', () => {
@@ -218,6 +295,233 @@ test.describe('eQTL comparison tool', () => {
         eqtls.map((eqtl) => eqtl.composite_id),
         STANDARD_PIN_LIMIT_COPY,
       );
+    });
+  });
+
+  test.describe('row selection', () => {
+    test('the first result is selected on load', async ({ page }) => {
+      const [first] = await fetchFirstPage(page);
+
+      await navigateToEqtlComparison(page, true);
+
+      await expectSelectedRow(page, first.composite_id);
+    });
+
+    test('nothing is selected when only pinned rows are showing', async ({ page }) => {
+      const [first] = await fetchFirstPage(page);
+      expect(await fetchEqtlsInCellClass(page, IMMUNE_CELL_CLASS)).toHaveLength(0);
+      const queryParameters = getQueryParamsFromRecords({
+        pinned: [first.composite_id],
+        [CELL_CLASS_FILTER.queryParamKey]: [IMMUNE_CELL_CLASS],
+      });
+
+      // navigateToEqtlComparison waits for a result row, and this view has none by design
+      await page.goto(`${EQTL_CT_PATH}?${queryParameters}`);
+      await closeTutorialDialog(page);
+      await expect(page.getByText(STANDARD_NO_RESULTS_MESSAGE)).toBeVisible();
+
+      await expect(getRowByName(getPinnedTable(page), page, first.composite_id)).toHaveCount(1);
+      await expect(getSelectedRows(page)).toHaveCount(0);
+    });
+
+    test('clicking a result selects it, and clicking it again keeps it selected', async ({
+      page,
+    }) => {
+      const [, second] = await fetchFirstPage(page);
+
+      await navigateToEqtlComparison(page, true);
+      await clickRowByName(getUnpinnedTable(page), page, second.composite_id);
+      await expectSelectedRow(page, second.composite_id);
+
+      await clickRowByName(getUnpinnedTable(page), page, second.composite_id);
+      await expectSelectedRow(page, second.composite_id);
+    });
+
+    test('clicking a pinned row selects it', async ({ page }) => {
+      const [first] = await fetchFirstPage(page);
+
+      await navigateToEqtlComparison(page, true, 'url', `pinned=${first.composite_id}`);
+      await clickRowByName(getPinnedTable(page), page, first.composite_id);
+
+      await expectSelectedRow(page, first.composite_id);
+    });
+
+    test('hovering a row highlights it only while hovered', async ({ page }) => {
+      const [, , third] = await fetchFirstPage(page);
+
+      await navigateToEqtlComparison(page, true);
+      await hoverRowByName(getUnpinnedTable(page), page, third.composite_id);
+      await expect(getHoveredRows(page)).toHaveCount(1);
+      await expect(getRowByName(getUnpinnedTable(page), page, third.composite_id)).toHaveClass(
+        /hovered/,
+      );
+
+      await page.mouse.move(0, 0);
+      await expect(getHoveredRows(page)).toHaveCount(0);
+    });
+
+    test('the selected row is highlighted only on its own page', async ({ page }) => {
+      const [, , third] = await fetchFirstPage(page);
+      const unpinnedTable = getUnpinnedTable(page);
+
+      await navigateToEqtlComparison(page, true);
+      await clickRowByName(unpinnedTable, page, third.composite_id);
+
+      await page.getByRole('button', { name: /next page/i }).click();
+      await expect(getRowByName(unpinnedTable, page, third.composite_id)).toHaveCount(0);
+      await expect(getSelectedRows(page)).toHaveCount(0);
+
+      await page.getByRole('button', { name: /previous page/i }).click();
+      await expectSelectedRow(page, third.composite_id);
+    });
+
+    test('a filter that keeps the selected row leaves it selected', async ({ page }) => {
+      const astrocyte = await findAstrocyteNotSelectedByDefault(page);
+
+      await navigateToEqtlComparison(page, true);
+      await clickRowByName(getUnpinnedTable(page), page, astrocyte.composite_id);
+      await filterByCellClass(page);
+
+      await expectSelectedRow(page, astrocyte.composite_id);
+    });
+
+    test('a filter that removes the selected row selects the first new result', async ({
+      page,
+    }) => {
+      const astrocyte = await findAstrocyteNotSelectedByDefault(page);
+      const [firstExcitatory] = await fetchEqtlsInCellClass(page, EXCITATORY_NEURON_CELL_CLASS);
+
+      await navigateToEqtlComparison(page, true);
+      await clickRowByName(getUnpinnedTable(page), page, astrocyte.composite_id);
+      await filterByCellClassValue(page, EXCITATORY_NEURON_CELL_CLASS);
+
+      await expectSelectedRow(page, firstExcitatory.composite_id);
+    });
+
+    test('a filter with no results selects nothing, and clearing it selects the first result', async ({
+      page,
+    }) => {
+      const [first, , third] = await fetchFirstPage(page);
+      expect(await fetchEqtlsInCellClass(page, IMMUNE_CELL_CLASS)).toHaveLength(0);
+
+      await navigateToEqtlComparison(page, true);
+      await clickRowByName(getUnpinnedTable(page), page, third.composite_id);
+      await filterByCellClassValue(page, IMMUNE_CELL_CLASS);
+      await expect(getRowByName(getUnpinnedTable(page), page, third.composite_id)).toHaveCount(0);
+      await expect(getSelectedRows(page)).toHaveCount(0);
+
+      await page.locator('.filter-list').getByRole('button', { name: 'Clear all' }).click();
+      await expectSelectedRow(page, first.composite_id);
+    });
+
+    test('a pinned selected row stays selected when a filter excludes it', async ({ page }) => {
+      const astrocyte = await findAstrocyteNotSelectedByDefault(page);
+
+      await navigateToEqtlComparison(page, true);
+      await clickRowByName(getUnpinnedTable(page), page, astrocyte.composite_id);
+      await pinByName(getUnpinnedTable(page), page, astrocyte.composite_id);
+      await filterByCellClassValue(page, EXCITATORY_NEURON_CELL_CLASS);
+
+      await expect(getRowByName(getPinnedTable(page), page, astrocyte.composite_id)).toHaveCount(1);
+      await expectSelectedRow(page, astrocyte.composite_id);
+    });
+
+    test('pinning and unpinning the selected row keeps it selected', async ({ page }) => {
+      const [, second] = await fetchFirstPage(page);
+
+      await navigateToEqtlComparison(page, true);
+      await clickRowByName(getUnpinnedTable(page), page, second.composite_id);
+
+      await pinByName(getUnpinnedTable(page), page, second.composite_id);
+      await expect(getRowByName(getPinnedTable(page), page, second.composite_id)).toHaveCount(1);
+      await expectSelectedRow(page, second.composite_id);
+
+      await unPinByName(getPinnedTable(page), page, second.composite_id);
+      await expect(getRowByName(getUnpinnedTable(page), page, second.composite_id)).toHaveCount(1);
+      await expectSelectedRow(page, second.composite_id);
+    });
+
+    // Pins two rows, selects the Astrocyte one, then filters it out of the results
+    const filterOutSelectedPinnedAstrocyte = async (page: Page) => {
+      const [firstExcitatory] = await fetchEqtlsInCellClass(page, EXCITATORY_NEURON_CELL_CLASS);
+      const astrocyte = await pinTwoAndSelectAstrocyte(page);
+      await filterByCellClassValue(page, EXCITATORY_NEURON_CELL_CLASS);
+      return { astrocyte, firstExcitatory };
+    };
+
+    test('unpinning the selected row while a filter excludes it selects the first result', async ({
+      page,
+    }) => {
+      const { astrocyte, firstExcitatory } = await filterOutSelectedPinnedAstrocyte(page);
+
+      await unPinByName(getPinnedTable(page), page, astrocyte.composite_id);
+
+      await expect(getRowByName(getPinnedTable(page), page, astrocyte.composite_id)).toHaveCount(0);
+      await expectSelectedRow(page, firstExcitatory.composite_id);
+    });
+
+    test('unpinning the selected row while a filter excludes it selects the first result, when the results land before the pinned rows', async ({
+      page,
+    }) => {
+      const { astrocyte, firstExcitatory } = await filterOutSelectedPinnedAstrocyte(page);
+      const heldPinnedRequests = await holdPinnedRowsUntilResultsLand(page, astrocyte.composite_id);
+
+      await unPinByName(getPinnedTable(page), page, astrocyte.composite_id);
+
+      await expect(getRowByName(getPinnedTable(page), page, astrocyte.composite_id)).toHaveCount(0);
+      await expectSelectedRow(page, firstExcitatory.composite_id);
+      expect(heldPinnedRequests()).toBeGreaterThan(0);
+    });
+
+    test('unpinning the selected row while a filter leaves no results selects nothing', async ({
+      page,
+    }) => {
+      // The first result stays pinned, so the second is the first one left in the results
+      const [, firstUnpinned] = await fetchFirstPage(page);
+      expect(await fetchEqtlsInCellClass(page, IMMUNE_CELL_CLASS)).toHaveLength(0);
+      const astrocyte = await pinTwoAndSelectAstrocyte(page);
+      await filterByCellClassValue(page, IMMUNE_CELL_CLASS);
+      const heldPinnedRequests = await holdPinnedRowsUntilResultsLand(page, astrocyte.composite_id);
+
+      await unPinByName(getPinnedTable(page), page, astrocyte.composite_id);
+      await expect(getRowByName(getPinnedTable(page), page, astrocyte.composite_id)).toHaveCount(0);
+      await expect(getSelectedRows(page)).toHaveCount(0);
+      expect(heldPinnedRequests()).toBeGreaterThan(0);
+
+      // A selection left on the unpinned row would show again once it's back in the results
+      await page.unrouteAll();
+      await page.locator('.filter-list').getByRole('button', { name: 'Clear all' }).click();
+      await expectSelectedRow(page, firstUnpinned.composite_id);
+    });
+
+    test('Clear All Pins while the selected row is pinned and filtered out selects the first result', async ({
+      page,
+    }) => {
+      const [firstExcitatory] = await fetchEqtlsInCellClass(page, EXCITATORY_NEURON_CELL_CLASS);
+      await pinTwoAndSelectAstrocyte(page);
+      await filterByCellClassValue(page, EXCITATORY_NEURON_CELL_CLASS);
+
+      await page.getByRole('button', { name: 'Clear All Pins' }).click();
+
+      await expect(getPinnedTable(page).locator('tbody tr')).toHaveCount(0);
+      await expectSelectedRow(page, firstExcitatory.composite_id);
+    });
+
+    test('selecting rows does not request the results again', async ({ page }) => {
+      const [, second, third, fourth] = await fetchFirstPage(page);
+
+      await navigateToEqtlComparison(page, true);
+      let eqtlsRequests = 0;
+      page.on('request', (request) => {
+        if (new URL(request.url()).pathname.endsWith(EQTLS_PATH)) eqtlsRequests++;
+      });
+
+      for (const eqtl of [second, third, fourth]) {
+        await clickRowByName(getUnpinnedTable(page), page, eqtl.composite_id);
+      }
+      await expectSelectedRow(page, fourth.composite_id);
+
+      expect(eqtlsRequests).toBe(0);
     });
   });
 
