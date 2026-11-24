@@ -2,8 +2,10 @@ name: Run e2e tests for Explorers
 
 on:
   push:
-  # Warning: using the pull_request_target event without the cautionary measures may allow
-  # unauthorized GitHub users to open a “pwn request” and exfiltrate secrets.
+  # pull_request_target gives fork PRs access to SYNAPSE_AUTH_TOKEN, so fork PRs from users
+  # without write access must run in an <explorer>-pr environment with required reviewers to
+  # prevent a "pwn request" (see e2e-explorer.yaml). The repo must also keep an Actions event
+  # policy that allows pull_request_target, which GitHub blocks by default on public repositories.
   pull_request_target:
     types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
 
@@ -16,7 +18,9 @@ concurrency:
 
 jobs:
   run-explorer-e2e:
-    # Run in Sage repo on main branch and on all branches in user-owned forks
+    # In the Sage repo, run on pushes to main and on every non-draft PR into main (under
+    # pull_request_target, github.ref_name is the PR's base branch). In user-owned forks, run on
+    # every push.
     if: ${{ (github.ref_name == 'main' || github.actor == github.repository_owner) && !github.event.pull_request.draft }}
     strategy:
       matrix:
