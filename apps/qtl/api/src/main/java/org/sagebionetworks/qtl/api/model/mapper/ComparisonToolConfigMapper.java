@@ -1,7 +1,6 @@
 package org.sagebionetworks.qtl.api.model.mapper;
 
 import java.util.List;
-import org.sagebionetworks.qtl.api.exception.DataIntegrityException;
 import org.sagebionetworks.qtl.api.model.document.ComparisonToolConfigDocument;
 import org.sagebionetworks.qtl.api.model.dto.ComparisonToolConfigColumnDto;
 import org.sagebionetworks.qtl.api.model.dto.ComparisonToolConfigDto;
@@ -9,12 +8,17 @@ import org.sagebionetworks.qtl.api.model.dto.ComparisonToolConfigFilterDto;
 import org.sagebionetworks.qtl.api.model.dto.ComparisonToolNounDto;
 import org.sagebionetworks.qtl.api.model.dto.ComparisonToolPageDto;
 import org.sagebionetworks.qtl.api.util.EnumConverter;
+import org.sagebionetworks.qtl.api.util.RequiredFieldValidator;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ComparisonToolConfigMapper {
 
   private static final String RECORD_TYPE = "comparison tool config record";
+
+  private static final RequiredFieldValidator REQUIRED_FIELDS = new RequiredFieldValidator(
+    RECORD_TYPE
+  );
 
   public ComparisonToolConfigDto toDto(ComparisonToolConfigDocument document) {
     if (document == null) {
@@ -28,19 +32,25 @@ public class ComparisonToolConfigMapper {
       RECORD_TYPE
     );
 
-    List<ComparisonToolConfigColumnDto> columns = requireValue(document.getColumns(), "columns")
+    List<ComparisonToolConfigColumnDto> columns = REQUIRED_FIELDS.require(
+      document.getColumns(),
+      "columns"
+    )
       .stream()
-      .map(column -> toComparisonToolConfigDto(requireValue(column, "column")))
+      .map(column -> toComparisonToolConfigDto(REQUIRED_FIELDS.require(column, "column")))
       .toList();
 
-    List<ComparisonToolConfigFilterDto> filters = requireValue(document.getFilters(), "filters")
+    List<ComparisonToolConfigFilterDto> filters = REQUIRED_FIELDS.require(
+      document.getFilters(),
+      "filters"
+    )
       .stream()
-      .map(filter -> toComparisonToolConfigFilterDto(requireValue(filter, "filter")))
+      .map(filter -> toComparisonToolConfigFilterDto(REQUIRED_FIELDS.require(filter, "filter")))
       .toList();
 
     ComparisonToolConfigDto dto = new ComparisonToolConfigDto(
       page,
-      requireValue(document.getDropdowns(), "dropdowns"),
+      REQUIRED_FIELDS.require(document.getDropdowns(), "dropdowns"),
       document.getRowCount(),
       columns,
       filters
@@ -64,9 +74,9 @@ public class ComparisonToolConfigMapper {
         "column type",
         RECORD_TYPE
       ),
-      requireValue(column.getDataKey(), "column data_key"),
-      requireValue(column.getIsExported(), "column is_exported"),
-      requireValue(column.getIsHidden(), "column is_hidden")
+      REQUIRED_FIELDS.require(column.getDataKey(), "column data_key"),
+      REQUIRED_FIELDS.require(column.getIsExported(), "column is_exported"),
+      REQUIRED_FIELDS.require(column.getIsHidden(), "column is_hidden")
     );
 
     dto.setName(column.getName());
@@ -83,16 +93,16 @@ public class ComparisonToolConfigMapper {
     ComparisonToolConfigDocument.ComparisonToolConfigFilter filter
   ) {
     ComparisonToolConfigFilterDto dto = new ComparisonToolConfigFilterDto(
-      requireValue(filter.getName(), "filter name"),
-      requireValue(filter.getDataKey(), "filter data_key"),
-      requireValue(filter.getQueryParamKey(), "filter query_param_key"),
+      REQUIRED_FIELDS.require(filter.getName(), "filter name"),
+      REQUIRED_FIELDS.require(filter.getDataKey(), "filter data_key"),
+      REQUIRED_FIELDS.require(filter.getQueryParamKey(), "filter query_param_key"),
       EnumConverter.toEnum(
         filter.getType(),
         ComparisonToolConfigFilterDto.TypeEnum::fromValue,
         "filter type",
         RECORD_TYPE
       ),
-      requireValue(filter.getValues(), "filter values")
+      REQUIRED_FIELDS.require(filter.getValues(), "filter values")
     );
     dto.setShortName(filter.getShortName());
     return dto;
@@ -106,15 +116,8 @@ public class ComparisonToolConfigMapper {
     }
 
     return new ComparisonToolNounDto(
-      requireValue(noun.getSingular(), "noun singular"),
-      requireValue(noun.getPlural(), "noun plural")
+      REQUIRED_FIELDS.require(noun.getSingular(), "noun singular"),
+      REQUIRED_FIELDS.require(noun.getPlural(), "noun plural")
     );
-  }
-
-  private static <T> T requireValue(T value, String fieldName) {
-    if (value == null) {
-      throw new DataIntegrityException("Missing " + fieldName + " in " + RECORD_TYPE);
-    }
-    return value;
   }
 }

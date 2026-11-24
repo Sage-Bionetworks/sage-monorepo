@@ -31,11 +31,9 @@ public final class EnumConverter {
     String fieldName,
     String recordType
   ) {
-    if (value == null) {
-      throw new DataIntegrityException("Missing " + fieldName + " in " + recordType);
-    }
+    String requiredValue = new RequiredFieldValidator(recordType).require(value, fieldName);
     try {
-      return converter.apply(value);
+      return converter.apply(requiredValue);
     } catch (IllegalArgumentException ex) {
       throw new DataIntegrityException(
         "Unexpected " + fieldName + " value '" + value + "' in " + recordType,
