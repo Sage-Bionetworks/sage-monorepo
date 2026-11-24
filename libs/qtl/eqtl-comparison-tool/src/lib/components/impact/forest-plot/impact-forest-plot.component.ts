@@ -99,6 +99,9 @@ export class ImpactForestPlotComponent {
     })),
   );
 
+  // With no data the chart draws its no-data state, which has no x-axis to title.
+  protected readonly hasData = computed(() => this.items().length > 0);
+
   readonly selectedCategory = computed(() => {
     const selected = this.effectSizes().find(
       (effectSize) => effectSize.cell_type_id === this.selectedCellClassId(),

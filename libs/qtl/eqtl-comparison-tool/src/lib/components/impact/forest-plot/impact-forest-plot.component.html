@@ -37,6 +37,8 @@
       [tooltipStyle]="tooltipStyle"
       [plotAreaMargins]="plotAreaMargins"
     ></div>
-    <p class="impact-forest-plot-x-axis-title">{{ xAxisTitle }}</p>
+    @if (hasData()) {
+      <p class="impact-forest-plot-x-axis-title">{{ xAxisTitle }}</p>
+    }
   }
 </figure>

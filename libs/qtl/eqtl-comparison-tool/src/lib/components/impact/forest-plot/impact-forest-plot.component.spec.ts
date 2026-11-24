@@ -45,6 +45,13 @@ describe('ImpactForestPlotComponent', () => {
     expect(within(figure).getByText(IMPACT_FOREST_PLOT_X_AXIS_TITLE)).toBeVisible();
   });
 
+  it('keeps the caption but leaves out the x-axis title when there are no effect sizes', async () => {
+    await setup(astrocyte, []);
+    const figure = screen.getByRole('figure', { name: IMPACT_FOREST_PLOT_TITLE });
+    expect(within(figure).getByText(IMPACT_FOREST_PLOT_TITLE)).toBeVisible();
+    expect(within(figure).queryByText(IMPACT_FOREST_PLOT_X_AXIS_TITLE)).toBeNull();
+  });
+
   it('lists the cell classes top to bottom alphabetically by full name, as uppercase abbreviations', async () => {
     const { forestPlot } = await setup();
     expect(forestPlot.items().map((item) => item.yAxisCategory)).toEqual([
