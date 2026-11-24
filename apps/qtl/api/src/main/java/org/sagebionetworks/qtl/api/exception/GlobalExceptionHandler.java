@@ -47,9 +47,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .body(errorDto);
   }
 
-  @ExceptionHandler(ComparisonToolConfigNotFoundException.class)
-  protected ResponseEntity<BasicErrorDto> handleComparisonToolConfigNotFound(
-    ComparisonToolConfigNotFoundException ex,
+  @ExceptionHandler(
+    { ComparisonToolConfigNotFoundException.class, EqtlPhenotypeNotFoundException.class }
+  )
+  protected ResponseEntity<BasicErrorDto> handleEntityNotFound(
+    RuntimeException ex,
     NativeWebRequest request,
     Locale locale
   ) {
