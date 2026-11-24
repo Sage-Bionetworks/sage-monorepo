@@ -244,6 +244,53 @@ describe('BaseTableComponent', () => {
       expect(service.selectedRowId()).toBeNull();
     });
 
+    it('clicking a cell selects its row', async () => {
+      const { nativeElement, service, user } = await setup({
+        rowSelectionEnabled: true,
+        rowIdDataKey: '_id',
+      });
+
+      const secondRow = nativeElement.querySelectorAll('tbody tr')[1];
+      const textCell = secondRow.querySelector('td.text');
+      expect(textCell).not.toBeNull();
+      await user.click(textCell as HTMLElement);
+
+      expect(service.selectedRowId()).toBe(String(mockComparisonToolData[1]['_id']));
+    });
+
+    it.each([
+      ['Pin', (row: HTMLElement) => within(row).getByRole('button', { name: 'Pin' })],
+      [
+        'View Details',
+        (row: HTMLElement) => within(row).getByRole('button', { name: 'View Details' }),
+      ],
+      ['a link', (row: HTMLElement) => within(row).getAllByRole('link')[0]],
+      [
+        'a heat map circle',
+        (row: HTMLElement) => row.querySelector('.heatmap-circle-button') as HTMLElement,
+      ],
+    ])('clicking %s does not select the row', async (_, getControl) => {
+      const { nativeElement, service, user } = await setup({
+        rowSelectionEnabled: true,
+        rowIdDataKey: '_id',
+        heatmapCircleClickTransformFn: () => ({
+          heading: 'Test',
+          subHeadings: [],
+          valueLabel: 'Test Label',
+          footer: 'Anything',
+        }),
+      });
+
+      const control = getControl(nativeElement.querySelector('tbody tr') as HTMLElement);
+      expect(control).toBeEnabled();
+      // A real click lands on the icon or text inside the control, not on the control itself
+      const controlContent = control.firstElementChild;
+      expect(controlContent).not.toBeNull();
+      await user.click(controlContent as HTMLElement);
+
+      expect(service.selectedRowId()).toBeNull();
+    });
+
     it('mouseenter calls setHoveredRowId() when rowHoverEnabled=true', async () => {
       const { fixture, service, nativeElement } = await setup({
         rowHoverEnabled: true,

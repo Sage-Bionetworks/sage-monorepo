@@ -31,7 +31,7 @@
     <ng-template pTemplate="body" let-rowData>
       @let rowId = comparisonToolService.rowId(rowData);
       <tr
-        (click)="onRowClick(rowId)"
+        (click)="onRowClick(rowId, $event)"
         (mouseenter)="onRowMouseEnter(rowId)"
         (mouseleave)="onRowMouseLeave()"
         [class.selected]="

@@ -346,6 +346,16 @@ test.describe('eQTL comparison tool', () => {
       await expectSelectedRow(page, first.composite_id);
     });
 
+    test("a row's Pin button pins it without selecting it", async ({ page }) => {
+      const [first, second] = await fetchFirstPage(page);
+
+      await navigateToEqtlComparison(page, true);
+      await pinByName(getUnpinnedTable(page), page, second.composite_id);
+
+      await expect(getRowByName(getPinnedTable(page), page, second.composite_id)).toHaveCount(1);
+      await expectSelectedRow(page, first.composite_id);
+    });
+
     test('hovering a row highlights it only while hovered', async ({ page }) => {
       const [, , third] = await fetchFirstPage(page);
 
