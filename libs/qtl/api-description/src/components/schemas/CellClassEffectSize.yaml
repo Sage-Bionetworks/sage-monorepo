@@ -1,0 +1,34 @@
+type: object
+description: Effect size, with its confidence interval, in one cell class.
+properties:
+  cell_type_id:
+    type: string
+    description: Cell type ID of the cell class
+    example: class_astro
+  cell_class:
+    type: string
+    description: Cell class
+    example: Astrocyte
+  cell_class_short:
+    type: string
+    description: Abbreviated cell class
+    example: Astro
+  value:
+    type: number
+    description: Effect size (beta)
+    example: 0.442711
+  ci_left:
+    type: number
+    description: Lower bound of the confidence interval
+    example: 0.137115
+  ci_right:
+    type: number
+    description: Upper bound of the confidence interval
+    example: 0.748307
+required:
+  - cell_type_id
+  - cell_class
+  - cell_class_short
+  - value
+  - ci_left
+  - ci_right

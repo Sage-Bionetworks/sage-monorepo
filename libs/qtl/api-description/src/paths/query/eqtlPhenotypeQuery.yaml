@@ -1,0 +1,8 @@
+name: eqtlPhenotypeQuery
+description: The query that identifies a single eQTL.
+in: query
+required: true
+style: deepObject
+explode: true
+schema:
+  $ref: ../../components/schemas/EqtlPhenotypeQuery.yaml

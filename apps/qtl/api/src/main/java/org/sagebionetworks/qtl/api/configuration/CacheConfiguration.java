@@ -32,7 +32,9 @@ public class CacheConfiguration {
 
     cacheManager.setCaffeine(Caffeine.newBuilder().maximumSize(MAXIMUM_CACHE_SIZE).recordStats());
 
-    cacheManager.setCacheNames(List.of(CacheNames.COMPARISON_TOOL_CONFIG, CacheNames.EQTL));
+    cacheManager.setCacheNames(
+      List.of(CacheNames.COMPARISON_TOOL_CONFIG, CacheNames.EQTL, CacheNames.EQTL_PHENOTYPE)
+    );
 
     return cacheManager;
   }

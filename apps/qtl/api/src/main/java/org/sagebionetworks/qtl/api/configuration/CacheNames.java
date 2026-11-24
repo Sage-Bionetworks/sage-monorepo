@@ -21,4 +21,10 @@ public final class CacheNames {
    * Key format: "eqtl-{filterType}-{items}-{selectedRowId}-{search}-{filters}-{page}-{size}-{budget}-{sort}"
    */
   public static final String EQTL = "eqtl";
+
+  /**
+   * Cache for eQTL phenotype queries.
+   * Key format: "{variant}~{ensemblGeneId}~{cellTypeId}"
+   */
+  public static final String EQTL_PHENOTYPE = "eqtlPhenotype";
 }

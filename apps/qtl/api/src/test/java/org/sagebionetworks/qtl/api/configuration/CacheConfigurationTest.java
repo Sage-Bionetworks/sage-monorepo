@@ -17,7 +17,11 @@ class CacheConfigurationTest {
     CacheManager cacheManager = new CacheConfiguration().cacheManager();
 
     // then
-    for (String name : new String[] { CacheNames.COMPARISON_TOOL_CONFIG, CacheNames.EQTL }) {
+    for (String name : new String[] {
+      CacheNames.COMPARISON_TOOL_CONFIG,
+      CacheNames.EQTL,
+      CacheNames.EQTL_PHENOTYPE,
+    }) {
       CaffeineCache springCache = (CaffeineCache) cacheManager.getCache(name);
       assertThat(springCache).as("cache '%s' should be registered", name).isNotNull();
 
