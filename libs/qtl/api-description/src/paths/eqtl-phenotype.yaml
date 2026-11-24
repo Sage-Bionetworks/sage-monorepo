@@ -1,0 +1,23 @@
+get:
+  tags:
+    - Eqtl Phenotype
+  summary: Get eQTL phenotype data
+  description: |
+    Returns the expression summaries and cell class effect sizes that drive the plots for a single eQTL,
+    identified by its variant, gene and cell type.
+  operationId: getEqtlPhenotype
+  parameters:
+    - $ref: ./query/eqtlPhenotypeQuery.yaml
+  responses:
+    '200':
+      description: Successfully retrieved the eQTL phenotype data
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/EqtlPhenotype.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

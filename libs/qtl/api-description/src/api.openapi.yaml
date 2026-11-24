@@ -21,6 +21,8 @@ tags:
     description: Operations about the data version.
   - name: Eqtl
     description: Operations about eQTLs.
+  - name: Eqtl Phenotype
+    description: Operations about eQTL phenotype data.
 paths:
   /comparison-tools/config:
     $ref: paths/comparison-tools/config.yaml
@@ -28,3 +30,5 @@ paths:
     $ref: paths/comparison-tools/eqtl.yaml
   /data-version:
     $ref: paths/data-version.yaml
+  /eqtl-phenotype:
+    $ref: paths/eqtl-phenotype.yaml

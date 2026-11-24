@@ -1,0 +1,19 @@
+type: object
+description: Identifies a single eQTL by its variant, gene and cell type.
+properties:
+  variant:
+    type: string
+    description: Variant ID
+    example: rs2120461
+  ensemblGeneId:
+    type: string
+    description: Ensembl gene ID
+    example: ENSG00000142599
+  cellTypeId:
+    type: string
+    description: Cell type ID of the eQTL's cell subclass
+    example: astro
+required:
+  - variant
+  - ensemblGeneId
+  - cellTypeId

@@ -1,0 +1,31 @@
+type: object
+description: Expression summaries and cell class effect sizes for a single eQTL.
+properties:
+  variant:
+    type: string
+    description: Variant ID
+    example: rs2120461
+  ensembl_gene_id:
+    type: string
+    description: Ensembl gene ID
+    example: ENSG00000142599
+  cell_type_id:
+    type: string
+    description: Cell type ID of the eQTL's cell subclass
+    example: astro
+  expression_summaries:
+    type: array
+    description: Gene expression summaries for each genotype, in the order stored in the data
+    items:
+      $ref: ./GenotypeExpressionSummary.yaml
+  effect_size_cell_class_data:
+    type: array
+    description: The variant's effect size on the gene in each cell class
+    items:
+      $ref: ./CellClassEffectSize.yaml
+required:
+  - variant
+  - ensembl_gene_id
+  - cell_type_id
+  - expression_summaries
+  - effect_size_cell_class_data
