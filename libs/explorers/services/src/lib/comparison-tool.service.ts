@@ -912,10 +912,6 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    // PrimeNG Popover.show() calls stopPropagation, so the click never reaches the <tr>.
-    // Select the row here so heatmap circle clicks still update the selection.
-    this.selectRow(this.rowId(rowData));
-
     const data = transform({
       rowData,
       cellData,

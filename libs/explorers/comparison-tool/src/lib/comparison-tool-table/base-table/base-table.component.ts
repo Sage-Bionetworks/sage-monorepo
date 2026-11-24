@@ -9,6 +9,9 @@ import { HeatmapCircleComponent } from '../heatmap-circle/heatmap-circle.compone
 import { canDrawHeatmapCircle } from '../heatmap-circle/heatmap-circle.utils';
 import { PrimaryIdentifierControlsComponent } from '../primary-identifier-controls/primary-identifier-controls.component';
 
+// Clicking a row's own controls, like Pin, View Details, links and heat map circles, keeps the selection.
+const ROW_CONTROL_SELECTOR = 'a, button, input, select, textarea, [role="button"]';
+
 @Component({
   selector: 'explorers-base-table',
   imports: [
@@ -64,7 +67,8 @@ export class BaseTableComponent {
     this.comparisonToolService.showHeatmapDetailsPanel(rowData, cellData, columnKey, event);
   }
 
-  onRowClick(rowId: string): void {
+  onRowClick(rowId: string, event: MouseEvent): void {
+    if (event.target instanceof Element && event.target.closest(ROW_CONTROL_SELECTOR)) return;
     this.comparisonToolService.selectRow(rowId);
   }
 

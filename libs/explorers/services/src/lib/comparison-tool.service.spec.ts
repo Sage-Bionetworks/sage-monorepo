@@ -3323,6 +3323,18 @@ describe('ComparisonToolService', () => {
       });
     });
 
+    it('should not select the row', () => {
+      connectService();
+      service.setViewConfig({
+        rowSelectionEnabled: true,
+        heatmapCircleClickTransformFn: jest.fn().mockReturnValue({ heading: 'Test' }),
+      });
+
+      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
+
+      expect(service.selectedRowId()).toBeNull();
+    });
+
     it('should not show panel when transform returns null', () => {
       connectService();
       const mockTransform = jest.fn().mockReturnValue(null);
