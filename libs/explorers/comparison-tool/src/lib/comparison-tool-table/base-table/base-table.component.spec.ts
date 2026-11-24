@@ -283,7 +283,10 @@ describe('BaseTableComponent', () => {
 
       const control = getControl(nativeElement.querySelector('tbody tr') as HTMLElement);
       expect(control).toBeEnabled();
-      await user.click(control);
+      // A real click lands on the icon or text inside the control, not on the control itself
+      const controlContent = control.firstElementChild;
+      expect(controlContent).not.toBeNull();
+      await user.click(controlContent as HTMLElement);
 
       expect(service.selectedRowId()).toBeNull();
     });
