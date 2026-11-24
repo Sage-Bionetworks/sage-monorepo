@@ -1,5 +1,17 @@
 import { Component, ElementRef, inject, signal, viewChildren } from '@angular/core';
-import { LoggerService } from '@sagebionetworks/explorers/services';
+import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  HttpErrorReportLevelEnum,
+  LoggerService,
+  PlatformService,
+  reportHttpError,
+} from '@sagebionetworks/explorers/services';
+import {
+  EqtlPhenotype,
+  EqtlPhenotypeQuery,
+  EqtlPhenotypeService,
+  GenotypeExpressionSummary,
+} from '@sagebionetworks/qtl/api-client';
 import { CellClass } from '@sagebionetworks/qtl/config';
 import { MetadataChicletComponent } from '@sagebionetworks/qtl/ui';
 import {
@@ -11,14 +23,13 @@ import {
   unknownCellSubclass,
 } from '@sagebionetworks/qtl/util';
 import { ImpactBoxplotComponent } from '../impact/boxplot/impact-boxplot.component';
-import { IMPACT_BOXPLOT_EXAMPLE_SUMMARIES } from '../impact/boxplot/impact-boxplot.constants';
 import { ImpactDetails, ImpactDetailsComponent } from '../impact/details/impact-details.component';
 import {
   ColoredCellClassEffectSize,
   ImpactForestPlotComponent,
 } from '../impact/forest-plot/impact-forest-plot.component';
 import { LegendComponent } from '../legend/legend.component';
-import { IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES } from '../impact/forest-plot/impact-forest-plot.constants';
+import { catchError, EMPTY, map, Observable } from 'rxjs';
 
 export const SIDEBAR_TABS = [
   { value: 'impact', label: 'Impact' },
@@ -30,6 +41,19 @@ type SidebarTab = (typeof SIDEBAR_TABS)[number]['value'];
 export const SIDEBAR_CHICLET_LIST_ARIA_LABEL = 'Selected eQTL';
 const UNKNOWN_CELL_CLASS_ID_MESSAGE = 'Unknown cell class ID';
 const UNKNOWN_CELL_SUBCLASS_ID_MESSAGE = 'Unknown cell subclass ID';
+export const EQTL_PHENOTYPE_ERROR_MESSAGE = 'Error loading eQTL phenotype data';
+
+// TODO(EX-281): take the eQTL from the selected row
+export const SIDEBAR_PLACEHOLDER_PHENOTYPE_QUERY: EqtlPhenotypeQuery = {
+  variant: 'rs2120461',
+  ensemblGeneId: 'ENSG00000142599',
+  cellTypeId: 'astro',
+};
+
+interface ImpactPlotData {
+  expressionSummaries: GenotypeExpressionSummary[];
+  effectSizes: ColoredCellClassEffectSize[];
+}
 
 @Component({
   selector: 'qtl-eqtl-comparison-tool-sidebar',
@@ -45,6 +69,8 @@ const UNKNOWN_CELL_SUBCLASS_ID_MESSAGE = 'Unknown cell subclass ID';
 })
 export class SidebarComponent {
   private readonly logger = inject(LoggerService).forSource('SidebarComponent');
+  private readonly platformService = inject(PlatformService);
+  private readonly eqtlPhenotypeService = inject(EqtlPhenotypeService);
 
   // TODO: update with dynamically fetched sidebar data
   protected readonly data = {
@@ -56,20 +82,13 @@ export class SidebarComponent {
     p_value: '1.25e-08',
     variant_location: 'chr:11:54455—252455',
     gene_location: 'chr:11:54455—252455',
-    // TODO: fetch from the eQTL phenotype endpoint (EX-283)
-    expression_summaries: IMPACT_BOXPLOT_EXAMPLE_SUMMARIES,
-    effect_size_cell_class_data: IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES,
   };
 
   protected readonly chicletListAriaLabel = SIDEBAR_CHICLET_LIST_ARIA_LABEL;
 
   protected readonly cellClass = this.lookUpCellClass(this.data.cell_class_id);
   protected readonly cellSubclass = this.lookUpCellSubclass(this.data.cell_subclass_id);
-  protected readonly effectSizes: ColoredCellClassEffectSize[] =
-    this.data.effect_size_cell_class_data.map((effectSize) => ({
-      ...effectSize,
-      color: this.lookUpCellClass(effectSize.cell_type_id).color,
-    }));
+  protected readonly impactPlotData = toSignal(this.loadImpactPlotData());
 
   protected readonly cellClassBackgroundColor = getCellClassMutedColor(this.cellClass);
 
@@ -86,6 +105,31 @@ export class SidebarComponent {
   protected readonly activeTab = signal<SidebarTab>('impact');
 
   private readonly tabButtons = viewChildren<ElementRef<HTMLButtonElement>>('tabButton');
+
+  private loadImpactPlotData(): Observable<ImpactPlotData> {
+    if (!this.platformService.isBrowser) return EMPTY;
+
+    return this.eqtlPhenotypeService.getEqtlPhenotype(SIDEBAR_PLACEHOLDER_PHENOTYPE_QUERY).pipe(
+      map((phenotype) => this.toImpactPlotData(phenotype)),
+      catchError((error) => {
+        reportHttpError(this.logger, EQTL_PHENOTYPE_ERROR_MESSAGE, {
+          error,
+          level: HttpErrorReportLevelEnum.Error,
+        });
+        return EMPTY;
+      }),
+    );
+  }
+
+  private toImpactPlotData(phenotype: EqtlPhenotype): ImpactPlotData {
+    return {
+      expressionSummaries: phenotype.expression_summaries,
+      effectSizes: phenotype.effect_size_cell_class_data.map((effectSize) => ({
+        ...effectSize,
+        color: this.lookUpCellClass(effectSize.cell_type_id).color,
+      })),
+    };
+  }
 
   private lookUpCellClass(cellClassId: string): CellClass {
     const cellClass = findCellClass(cellClassId);

@@ -1,13 +1,13 @@
 import { By } from '@angular/platform-browser';
 import { ForestPlotDirective } from '@sagebionetworks/explorers/charts-angular';
 import { CellClassId } from '@sagebionetworks/qtl/config';
+import { coloredCellClassEffectSizesMock } from '@sagebionetworks/qtl/testing';
 import { render, screen, within } from '@testing-library/angular';
 import {
   ColoredCellClassEffectSize,
   ImpactForestPlotComponent,
 } from './impact-forest-plot.component';
 import {
-  IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES,
   IMPACT_FOREST_PLOT_TITLE,
   IMPACT_FOREST_PLOT_X_AXIS_TITLE,
 } from './impact-forest-plot.constants';
@@ -16,7 +16,7 @@ const astrocyte: CellClassId = 'class_astro';
 
 async function setup(
   selectedCellClassId: string = astrocyte,
-  effectSizes: ColoredCellClassEffectSize[] = IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES,
+  effectSizes: ColoredCellClassEffectSize[] = coloredCellClassEffectSizesMock,
 ) {
   const { fixture } = await render(ImpactForestPlotComponent, {
     componentInputs: { selectedCellClassId, effectSizes },
@@ -28,7 +28,7 @@ async function setup(
 }
 
 function findExampleEffectSize(cellClassId: CellClassId): ColoredCellClassEffectSize {
-  const effectSize = IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES.find(
+  const effectSize = coloredCellClassEffectSizesMock.find(
     (example) => example.cell_type_id === cellClassId,
   );
   if (!effectSize) throw new Error(`No example effect size for ${cellClassId}`);
@@ -73,7 +73,7 @@ describe('ImpactForestPlotComponent', () => {
   });
 
   it('bolds no row when the selected cell class has no effect size', async () => {
-    const effectSizesWithoutAstrocyte = IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES.filter(
+    const effectSizesWithoutAstrocyte = coloredCellClassEffectSizesMock.filter(
       (effectSize) => effectSize.cell_type_id !== astrocyte,
     );
     const { forestPlot } = await setup(astrocyte, effectSizesWithoutAstrocyte);

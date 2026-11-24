@@ -1,6 +1,6 @@
+import { coloredCellClassEffectSizesMock } from '@sagebionetworks/qtl/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ImpactForestPlotComponent } from './impact-forest-plot.component';
-import { IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES } from './impact-forest-plot.constants';
 
 const meta: Meta<ImpactForestPlotComponent> = {
   component: ImpactForestPlotComponent,
@@ -12,13 +12,13 @@ type Story = StoryObj<ImpactForestPlotComponent>;
 export const Demo: Story = {
   args: {
     selectedCellClassId: 'class_astro',
-    effectSizes: IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES,
+    effectSizes: coloredCellClassEffectSizesMock,
   },
 };
 
 export const ImmuneCellSelected: Story = {
   args: {
     selectedCellClassId: 'class_immune',
-    effectSizes: IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES,
+    effectSizes: coloredCellClassEffectSizesMock,
   },
 };

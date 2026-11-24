@@ -1,19 +1,17 @@
 import { By } from '@angular/platform-browser';
 import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
+import { eqtlPhenotypeMock } from '@sagebionetworks/qtl/testing';
 import { ResolvedCellSubclass, resolveCellSubclass } from '@sagebionetworks/qtl/util';
 import { render, screen, within } from '@testing-library/angular';
 import { ImpactBoxplotComponent } from './impact-boxplot.component';
-import {
-  IMPACT_BOXPLOT_EXAMPLE_SUMMARIES,
-  IMPACT_BOXPLOT_TITLE_PREFIX,
-} from './impact-boxplot.constants';
+import { IMPACT_BOXPLOT_TITLE_PREFIX } from './impact-boxplot.constants';
 
 const astrocyteSubclass = resolveCellSubclass('astro');
 const adaptiveImmuneSubclass = resolveCellSubclass('adaptiveimmune');
 
 async function setup(cellSubclass: ResolvedCellSubclass = astrocyteSubclass) {
   const { fixture } = await render(ImpactBoxplotComponent, {
-    componentInputs: { cellSubclass, expressionSummaries: IMPACT_BOXPLOT_EXAMPLE_SUMMARIES },
+    componentInputs: { cellSubclass, expressionSummaries: eqtlPhenotypeMock.expression_summaries },
   });
   const boxplot = fixture.debugElement
     .query(By.directive(BoxplotDirective))
@@ -33,14 +31,14 @@ describe('ImpactBoxplotComponent', () => {
 
   it('plots one box per genotype, in the given order', async () => {
     const { boxplot } = await setup();
-    const genotypes = IMPACT_BOXPLOT_EXAMPLE_SUMMARIES.map((summary) => summary.genotype);
+    const genotypes = eqtlPhenotypeMock.expression_summaries.map((summary) => summary.genotype);
     expect(boxplot.xAxisCategories).toEqual(genotypes);
     expect(boxplot.summaries?.map((summary) => summary.xAxisCategory)).toEqual(genotypes);
   });
 
   it('carries each summary statistic over to its box', async () => {
     const { boxplot } = await setup();
-    const [firstSummary] = IMPACT_BOXPLOT_EXAMPLE_SUMMARIES;
+    const [firstSummary] = eqtlPhenotypeMock.expression_summaries;
     expect(boxplot.summaries?.[0]).toEqual({
       xAxisCategory: firstSummary.genotype,
       min: firstSummary.min,
