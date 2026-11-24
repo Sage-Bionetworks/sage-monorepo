@@ -1,4 +1,5 @@
 export * from './basic-error';
+export * from './cell-class-effect-size';
 export * from './comparison-tool-config';
 export * from './comparison-tool-config-column';
 export * from './comparison-tool-config-filter';
@@ -7,8 +8,11 @@ export * from './comparison-tool-page';
 export * from './data-version';
 export * from './effect-direction';
 export * from './eqtl';
+export * from './eqtl-phenotype';
+export * from './eqtl-phenotype-query';
 export * from './eqtl-search-query';
 export * from './eqtls-page';
 export * from './genomic-location';
+export * from './genotype-expression-summary';
 export * from './item-filter-type-query';
 export * from './page-metadata';

@@ -21,6 +21,8 @@ tags:
     name: Data Version
   - description: Operations about eQTLs.
     name: Eqtl
+  - description: Operations about eQTL phenotype data.
+    name: Eqtl Phenotype
 paths:
   /comparison-tools/config:
     get:
@@ -120,6 +122,42 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Data Version
+  /eqtl-phenotype:
+    get:
+      description: |
+        Returns the expression summaries and cell class effect sizes that drive the plots for a single eQTL,
+        identified by its variant, gene and cell type.
+      operationId: getEqtlPhenotype
+      parameters:
+        - description: The query that identifies a single eQTL.
+          explode: true
+          in: query
+          name: eqtlPhenotypeQuery
+          required: true
+          schema:
+            $ref: '#/components/schemas/EqtlPhenotypeQuery'
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EqtlPhenotype'
+          description: Successfully retrieved the eQTL phenotype data
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get eQTL phenotype data
+      tags:
+        - Eqtl Phenotype
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Eqtl Phenotype
 components:
   parameters:
     eqtlSearchQuery:
@@ -130,6 +168,15 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/EqtlSearchQuery'
+      style: deepObject
+    eqtlPhenotypeQuery:
+      description: The query that identifies a single eQTL.
+      explode: true
+      in: query
+      name: eqtlPhenotypeQuery
+      required: true
+      schema:
+        $ref: '#/components/schemas/EqtlPhenotypeQuery'
       style: deepObject
   responses:
     BadRequest:
@@ -856,4 +903,171 @@ components:
       required:
         - data_file
         - data_version
+      type: object
+    EqtlPhenotypeQuery:
+      description: 'Identifies a single eQTL by its variant, gene and cell type.'
+      properties:
+        variant:
+          description: Variant ID
+          example: rs2120461
+          type: string
+        ensemblGeneId:
+          description: Ensembl gene ID
+          example: ENSG00000142599
+          type: string
+        cellTypeId:
+          description: Cell type ID of the eQTL's cell subclass
+          example: astro
+          type: string
+      required:
+        - cellTypeId
+        - ensemblGeneId
+        - variant
+      type: object
+    GenotypeExpressionSummary:
+      description: Five-number summary of gene expression for samples with one genotype.
+      example:
+        min: -2.2889
+        first_quartile: -0.5532
+        median: -0.004
+        max: 2.3396
+        genotype: CT
+        third_quartile: 0.6039
+      properties:
+        genotype:
+          description: Genotype
+          example: CT
+          type: string
+        min:
+          description: Minimum expression
+          example: -2.2889
+          type: number
+        first_quartile:
+          description: First quartile of expression
+          example: -0.5532
+          type: number
+        median:
+          description: Median expression
+          example: -0.004
+          type: number
+        third_quartile:
+          description: Third quartile of expression
+          example: 0.6039
+          type: number
+        max:
+          description: Maximum expression
+          example: 2.3396
+          type: number
+      required:
+        - first_quartile
+        - genotype
+        - max
+        - median
+        - min
+        - third_quartile
+      type: object
+    CellClassEffectSize:
+      description: 'Effect size, with its confidence interval, in one cell class.'
+      example:
+        cell_class: Astrocyte
+        ci_left: 0.137115
+        ci_right: 0.748307
+        cell_class_short: Astro
+        cell_type_id: class_astro
+        value: 0.442711
+      properties:
+        cell_type_id:
+          description: Cell type ID of the cell class
+          example: class_astro
+          type: string
+        cell_class:
+          description: Cell class
+          example: Astrocyte
+          type: string
+        cell_class_short:
+          description: Abbreviated cell class
+          example: Astro
+          type: string
+        value:
+          description: Effect size (beta)
+          example: 0.442711
+          type: number
+        ci_left:
+          description: Lower bound of the confidence interval
+          example: 0.137115
+          type: number
+        ci_right:
+          description: Upper bound of the confidence interval
+          example: 0.748307
+          type: number
+      required:
+        - cell_class
+        - cell_class_short
+        - cell_type_id
+        - ci_left
+        - ci_right
+        - value
+      type: object
+    EqtlPhenotype:
+      description: Expression summaries and cell class effect sizes for a single eQTL.
+      example:
+        ensembl_gene_id: ENSG00000142599
+        variant: rs2120461
+        effect_size_cell_class_data:
+          - cell_class: Astrocyte
+            ci_left: 0.137115
+            ci_right: 0.748307
+            cell_class_short: Astro
+            cell_type_id: class_astro
+            value: 0.442711
+          - cell_class: Astrocyte
+            ci_left: 0.137115
+            ci_right: 0.748307
+            cell_class_short: Astro
+            cell_type_id: class_astro
+            value: 0.442711
+        cell_type_id: astro
+        expression_summaries:
+          - min: -2.2889
+            first_quartile: -0.5532
+            median: -0.004
+            max: 2.3396
+            genotype: CT
+            third_quartile: 0.6039
+          - min: -2.2889
+            first_quartile: -0.5532
+            median: -0.004
+            max: 2.3396
+            genotype: CT
+            third_quartile: 0.6039
+      properties:
+        variant:
+          description: Variant ID
+          example: rs2120461
+          type: string
+        ensembl_gene_id:
+          description: Ensembl gene ID
+          example: ENSG00000142599
+          type: string
+        cell_type_id:
+          description: Cell type ID of the eQTL's cell subclass
+          example: astro
+          type: string
+        expression_summaries:
+          description: "Gene expression summaries for each genotype, in the order\
+            \ stored in the data"
+          items:
+            $ref: '#/components/schemas/GenotypeExpressionSummary'
+          type: array
+        effect_size_cell_class_data:
+          description: The variant's effect size on the gene in each cell class
+          items:
+            $ref: '#/components/schemas/CellClassEffectSize'
+          type: array
+      required:
+        - cell_type_id
+        - effect_size_cell_class_data
+        - ensembl_gene_id
+        - expression_summaries
+        - variant
       type: object
