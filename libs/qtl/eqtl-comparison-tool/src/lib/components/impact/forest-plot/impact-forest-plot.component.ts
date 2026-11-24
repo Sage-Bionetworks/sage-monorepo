@@ -6,6 +6,7 @@ import {
   GridLineStyle,
 } from '@sagebionetworks/explorers/charts';
 import { ForestPlotDirective } from '@sagebionetworks/explorers/charts-angular';
+import { CellClassEffectSize } from '@sagebionetworks/qtl/api-client';
 import { computeEffectSizeXAxis } from './impact-forest-plot-x-axis';
 import {
   IMPACT_FOREST_PLOT_CI_LINE_WIDTH_PX,
@@ -22,15 +23,6 @@ import {
   IMPACT_FOREST_PLOT_X_AXIS_TITLE,
   IMPACT_FOREST_PLOT_Y_AXIS_LABEL_MARGIN_PX,
 } from './impact-forest-plot.constants';
-
-export interface CellClassEffectSize {
-  cell_type_id: string;
-  cell_class: string;
-  cell_class_short: string;
-  value: number;
-  ci_left: number;
-  ci_right: number;
-}
 
 export interface ColoredCellClassEffectSize extends CellClassEffectSize {
   color: string;

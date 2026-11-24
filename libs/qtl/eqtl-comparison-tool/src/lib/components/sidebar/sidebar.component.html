@@ -54,16 +54,18 @@
   @switch (activeTab()) {
     @case ('impact') {
       <qtl-eqtl-comparison-tool-impact-details [details]="impactDetails" />
-      <qtl-eqtl-comparison-tool-impact-boxplot
-        class="sidebar-impact-boxplot"
-        [cellSubclass]="cellSubclass"
-        [expressionSummaries]="data.expression_summaries"
-      />
-      <qtl-eqtl-comparison-tool-impact-forest-plot
-        class="sidebar-impact-forest-plot"
-        [selectedCellClassId]="data.cell_class_id"
-        [effectSizes]="effectSizes"
-      />
+      @if (impactPlotData(); as plotData) {
+        <qtl-eqtl-comparison-tool-impact-boxplot
+          class="sidebar-impact-boxplot"
+          [cellSubclass]="cellSubclass"
+          [expressionSummaries]="plotData.expressionSummaries"
+        />
+        <qtl-eqtl-comparison-tool-impact-forest-plot
+          class="sidebar-impact-forest-plot"
+          [selectedCellClassId]="data.cell_class_id"
+          [effectSizes]="plotData.effectSizes"
+        />
+      }
       <!-- TODO: add the remaining impact tab content (EX-73) -->
     }
     @case ('legend') {

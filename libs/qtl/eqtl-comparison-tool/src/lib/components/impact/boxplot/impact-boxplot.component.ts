@@ -7,6 +7,7 @@ import {
   TooltipStyle,
 } from '@sagebionetworks/explorers/charts';
 import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
+import { GenotypeExpressionSummary } from '@sagebionetworks/qtl/api-client';
 import { ResolvedCellSubclass } from '@sagebionetworks/qtl/util';
 import {
   IMPACT_BOXPLOT_CHART_HEIGHT_PX,
@@ -14,15 +15,6 @@ import {
   IMPACT_BOXPLOT_PLOT_AREA_MARGINS,
   IMPACT_BOXPLOT_TITLE_PREFIX,
 } from './impact-boxplot.constants';
-
-export interface GenotypeExpressionSummary {
-  genotype: string;
-  min: number;
-  first_quartile: number;
-  median: number;
-  third_quartile: number;
-  max: number;
-}
 
 @Component({
   selector: 'qtl-eqtl-comparison-tool-impact-boxplot',

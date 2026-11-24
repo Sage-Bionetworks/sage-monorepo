@@ -19,10 +19,12 @@ import {
   ComparisonToolConfigService,
   ComparisonToolPage,
   Eqtl,
+  EqtlPhenotypeService,
   EqtlService,
   EqtlsPage,
   ItemFilterTypeQuery,
 } from '@sagebionetworks/qtl/api-client';
+import { eqtlPhenotypeMock } from '@sagebionetworks/qtl/testing';
 import { render, screen } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
@@ -88,6 +90,12 @@ async function setup(page: EqtlsPage = mockPage([])) {
         provide: EqtlService,
         useValue: {
           getEqtls: jest.fn().mockReturnValue(of(page)),
+        },
+      },
+      {
+        provide: EqtlPhenotypeService,
+        useValue: {
+          getEqtlPhenotype: jest.fn().mockReturnValue(of(eqtlPhenotypeMock)),
         },
       },
       MessageService,

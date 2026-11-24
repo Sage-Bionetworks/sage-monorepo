@@ -3,8 +3,6 @@ import {
   RowHoverHighlightStyle,
   TooltipStyle,
 } from '@sagebionetworks/explorers/charts';
-import { CELL_CLASSES, CellClassId } from '@sagebionetworks/qtl/config';
-import { CellClassEffectSize, ColoredCellClassEffectSize } from './impact-forest-plot.component';
 
 export const IMPACT_FOREST_PLOT_TITLE = 'Effect Sizes by Cell Class';
 
@@ -56,69 +54,3 @@ export const IMPACT_FOREST_PLOT_ROW_HOVER_HIGHLIGHT_STYLE: RowHoverHighlightStyl
   backgroundColor: 'rgba(158, 158, 158, 0.15)',
   thickness: 13,
 };
-
-// The astro document's cell class effect sizes for rs2120461 in the eqtl_phenotype collection.
-export const IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES = [
-  {
-    cell_type_id: 'class_astro',
-    cell_class_short: 'Astro',
-    cell_class: 'Astrocyte',
-    value: 0.442711,
-    ci_left: 0.137115,
-    ci_right: 0.748307,
-  },
-  {
-    cell_type_id: 'class_en',
-    cell_class_short: 'EN',
-    cell_class: 'Excitatory Neuron',
-    value: -0.033462,
-    ci_left: -0.638222,
-    ci_right: 0.571298,
-  },
-  {
-    cell_type_id: 'class_immune',
-    cell_class_short: 'Immune',
-    cell_class: 'Immune Cell',
-    value: -0.22059,
-    ci_left: -0.786843,
-    ci_right: 0.345663,
-  },
-  {
-    cell_type_id: 'class_in',
-    cell_class_short: 'IN',
-    cell_class: 'Inhibitory Neuron',
-    value: -0.271663,
-    ci_left: -0.46386,
-    ci_right: -0.079467,
-  },
-  {
-    cell_type_id: 'class_oligo',
-    cell_class_short: 'Oligo',
-    cell_class: 'Oligodendrocyte',
-    value: 0.045695,
-    ci_left: -0.027471,
-    ci_right: 0.11886,
-  },
-  {
-    cell_type_id: 'class_opc',
-    cell_class_short: 'OPC',
-    cell_class: 'Oligodendrocyte Progenitor Cell',
-    value: 0.515378,
-    ci_left: 0.375932,
-    ci_right: 0.654825,
-  },
-  {
-    cell_type_id: 'class_vascular',
-    cell_class_short: 'Vascular',
-    cell_class: 'Vascular Cell',
-    value: 0.124516,
-    ci_left: -0.434836,
-    ci_right: 0.683868,
-  },
-] satisfies (CellClassEffectSize & { cell_type_id: CellClassId })[];
-
-export const IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES: ColoredCellClassEffectSize[] =
-  IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES.map((effectSize) => ({
-    ...effectSize,
-    color: CELL_CLASSES[effectSize.cell_type_id].color,
-  }));

@@ -1,22 +1,61 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import {
+  formatHttpErrorReportMessage,
+  HttpRequestError,
+  PlatformService,
+  SourceLogger,
+} from '@sagebionetworks/explorers/services';
+import { EqtlPhenotype, EqtlPhenotypeService } from '@sagebionetworks/qtl/api-client';
+import { eqtlPhenotypeMock } from '@sagebionetworks/qtl/testing';
 import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { Observable, of, throwError } from 'rxjs';
 import { IMPACT_BOXPLOT_TITLE_PREFIX } from '../impact/boxplot/impact-boxplot.constants';
 import { IMPACT_DETAIL_FIELDS } from '../impact/details/impact-details.component';
 import { IMPACT_FOREST_PLOT_TITLE } from '../impact/forest-plot/impact-forest-plot.constants';
 import { LEGEND_CELL_CLASSES_TITLE } from '../legend/legend.constants';
 import {
+  EQTL_PHENOTYPE_ERROR_MESSAGE,
   SIDEBAR_CHICLET_LIST_ARIA_LABEL,
+  SIDEBAR_PLACEHOLDER_PHENOTYPE_QUERY,
   SIDEBAR_TABS,
   SidebarComponent,
 } from './sidebar.component';
 
 const [impactTabLabel, legendTabLabel] = SIDEBAR_TABS.map((tab) => tab.label);
 
-async function setup() {
-  return render(SidebarComponent, {
-    providers: [provideNoopAnimations()],
+const browserPlatform = { isBrowser: true, isServer: false };
+const serverPlatform = { isBrowser: false, isServer: true };
+
+async function setup({
+  phenotypeResponse = of(eqtlPhenotypeMock),
+  platformService = browserPlatform,
+}: {
+  phenotypeResponse?: Observable<EqtlPhenotype>;
+  platformService?: typeof browserPlatform;
+} = {}) {
+  const mockEqtlPhenotypeService = {
+    getEqtlPhenotype: jest.fn().mockReturnValue(phenotypeResponse),
+  };
+  const component = await render(SidebarComponent, {
+    providers: [
+      provideNoopAnimations(),
+      { provide: PlatformService, useValue: platformService },
+      { provide: EqtlPhenotypeService, useValue: mockEqtlPhenotypeService },
+    ],
   });
+  return { component, mockEqtlPhenotypeService };
+}
+
+function queryImpactPlots() {
+  const impactPanel = screen.getByRole('tabpanel');
+  return {
+    boxplot: within(impactPanel).queryByRole('figure', {
+      name: `${IMPACT_BOXPLOT_TITLE_PREFIX} (Astrocyte)`,
+    }),
+    forestPlot: within(impactPanel).queryByRole('figure', { name: IMPACT_FOREST_PLOT_TITLE }),
+  };
 }
 
 function getChicletTexts(): string[] {
@@ -45,22 +84,46 @@ describe('SidebarComponent', () => {
     expect(cellClassTerm.nextElementSibling).toHaveTextContent('Astrocyte');
   });
 
+  it('requests the phenotype data of the eQTL', async () => {
+    const { mockEqtlPhenotypeService } = await setup();
+    expect(mockEqtlPhenotypeService.getEqtlPhenotype).toHaveBeenCalledWith(
+      SIDEBAR_PLACEHOLDER_PHENOTYPE_QUERY,
+    );
+  });
+
   it('shows the expression-by-genotype boxplot in the Impact tab, for the same cell subclass as the chiclet', async () => {
     await setup();
-    const impactPanel = screen.getByRole('tabpanel');
-    expect(
-      within(impactPanel).getByRole('figure', {
-        name: `${IMPACT_BOXPLOT_TITLE_PREFIX} (Astrocyte)`,
-      }),
-    ).toBeVisible();
+    expect(queryImpactPlots().boxplot).toBeVisible();
   });
 
   it('shows the effect sizes by cell class plot in the Impact tab', async () => {
     await setup();
-    const impactPanel = screen.getByRole('tabpanel');
-    expect(
-      within(impactPanel).getByRole('figure', { name: IMPACT_FOREST_PLOT_TITLE }),
-    ).toBeVisible();
+    expect(queryImpactPlots().forestPlot).toBeVisible();
+  });
+
+  it('does not request the phenotype data or show the plots on the server', async () => {
+    const { mockEqtlPhenotypeService } = await setup({ platformService: serverPlatform });
+    expect(mockEqtlPhenotypeService.getEqtlPhenotype).not.toHaveBeenCalled();
+    expect(queryImpactPlots()).toEqual({ boxplot: null, forestPlot: null });
+  });
+
+  it('reports a failed phenotype request and leaves out the plots', async () => {
+    const error = new HttpRequestError(
+      new HttpErrorResponse({
+        status: HttpStatusCode.NotFound,
+        url: 'https://xqtlexplorer.adknowledgeportal.org/api/v1/eqtl-phenotype',
+      }),
+      'GET',
+    );
+    const loggerError = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+
+    await setup({ phenotypeResponse: throwError(() => error) });
+
+    expect(loggerError).toHaveBeenCalledWith(
+      formatHttpErrorReportMessage(EQTL_PHENOTYPE_ERROR_MESSAGE, error),
+      expect.objectContaining({ error }),
+    );
+    expect(queryImpactPlots()).toEqual({ boxplot: null, forestPlot: null });
   });
 
   it('renders the Impact and Legend tab headers', async () => {
