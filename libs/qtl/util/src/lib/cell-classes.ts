@@ -12,6 +12,7 @@ export const CELL_CLASS_MUTED_COLOR_PERCENT = 50;
 export interface ResolvedCellSubclass {
   name: string;
   color: string;
+  cellClassId: string;
   cellClass: CellClass;
 }
 
@@ -25,7 +26,7 @@ function isCellSubclassId(id: string): id is CellSubclassId {
 
 export function resolveCellSubclass(cellSubclassId: CellSubclassId): ResolvedCellSubclass {
   const { name, color, cellClassId } = CELL_SUBCLASSES[cellSubclassId];
-  return { name, color, cellClass: CELL_CLASSES[cellClassId] };
+  return { name, color, cellClassId, cellClass: CELL_CLASSES[cellClassId] };
 }
 
 /** Returns `undefined` when the ID isn't in the cell type color guide. */
@@ -48,6 +49,7 @@ export function unknownCellSubclass(cellSubclassId: string): ResolvedCellSubclas
   return {
     name: cellSubclassId,
     color: UNKNOWN_CELL_TYPE_COLOR,
+    cellClassId: cellSubclassId,
     cellClass: unknownCellClass(cellSubclassId),
   };
 }

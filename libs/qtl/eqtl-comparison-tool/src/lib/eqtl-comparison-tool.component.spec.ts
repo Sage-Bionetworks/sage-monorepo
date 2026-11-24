@@ -24,34 +24,16 @@ import {
   EqtlsPage,
   ItemFilterTypeQuery,
 } from '@sagebionetworks/qtl/api-client';
-import { eqtlPhenotypeMock } from '@sagebionetworks/qtl/testing';
-import { render, screen } from '@testing-library/angular';
+import { eqtlMock, eqtlPhenotypeMock } from '@sagebionetworks/qtl/testing';
+import { render, screen, within } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
-import { SIDEBAR_TABS } from './components/sidebar/sidebar.component';
+import {
+  SIDEBAR_CHICLET_LIST_ARIA_LABEL,
+  SIDEBAR_TABS,
+} from './components/sidebar/sidebar.component';
 import { EqtlComparisonToolComponent } from './eqtl-comparison-tool.component';
 import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.service';
-
-const mockEqtl: Eqtl = {
-  composite_id: 'rs2120461~ENSG00000142599~astro',
-  variant: 'rs2120461',
-  variant_location: { chr: '1', start: 8387662, end: 8387663 },
-  effect_direction: 'Up',
-  gene_symbol: 'RERE',
-  ensembl_gene_id: 'ENSG00000142599',
-  gene_location: { chr: '1', start: 8387662, end: 8387663 },
-  beta: 0.575878,
-  adj_p_val: '1.05E-136',
-  adj_p_val_numeric: -135.977471,
-  maf: 0.3321,
-  minor_allele: 'C',
-  reference_allele: 'T',
-  cell_type_id: 'astro',
-  cell_class: 'Astrocyte',
-  cell_class_short: 'Astro',
-  cell_subclass: 'Astrocyte',
-  cell_subclass_short: 'Astro',
-};
 
 function mockPage(rows: Eqtl[], totalElements = rows.length): EqtlsPage {
   return {
@@ -151,9 +133,9 @@ describe('EqtlComparisonToolComponent', () => {
 
   it('should hand the unpinned eQTLs and their total to the comparison tool service', async () => {
     const totalElements = 381;
-    const { comparisonToolService } = await setup(mockPage([mockEqtl], totalElements));
+    const { comparisonToolService } = await setup(mockPage([eqtlMock], totalElements));
 
-    expect(comparisonToolService.unpinnedData()).toEqual([mockEqtl]);
+    expect(comparisonToolService.unpinnedData()).toEqual([eqtlMock]);
     expect(comparisonToolService.unpinnedRowCount()).toBe(totalElements);
   });
 
@@ -176,31 +158,31 @@ describe('EqtlComparisonToolComponent', () => {
 
   it('should identify each eQTL by its composite id', async () => {
     const { comparisonToolService } = await setup();
-    expect(comparisonToolService.rowId(mockEqtl)).toBe(mockEqtl.composite_id);
+    expect(comparisonToolService.rowId(eqtlMock)).toBe(eqtlMock.composite_id);
   });
 
   it('should request a pinned eQTL in the current sort and show it in the pinned section', async () => {
     const { fixture, component, comparisonToolService, eqtlService } = await setup(
-      mockPage([mockEqtl]),
+      mockPage([eqtlMock]),
     );
     const defaultSort = component.viewConfig.defaultSort ?? [];
 
-    comparisonToolService.pinItem(mockEqtl);
+    comparisonToolService.pinItem(eqtlMock);
     fixture.detectChanges();
 
     const queriesSent = jest.mocked(eqtlService.getEqtls).mock.calls.map(([query]) => query);
     expect(queriesSent).toContainEqual({
-      items: [mockEqtl.composite_id],
+      items: [eqtlMock.composite_id],
       itemFilterType: ItemFilterTypeQuery.Include,
       sortFields: defaultSort.map((sort) => sort.field),
       sortOrders: defaultSort.map((sort) => sort.order),
     });
-    expect(comparisonToolService.pinnedData()).toEqual([mockEqtl]);
+    expect(comparisonToolService.pinnedData()).toEqual([eqtlMock]);
   });
 
   it('should leave the pinned eQTLs out of the unpinned query', async () => {
     const { component, eqtlService } = await setup();
-    const pinnedItems = [mockEqtl.composite_id];
+    const pinnedItems = [eqtlMock.composite_id];
 
     component.getUnpinnedData({ ...mockEmptyComparisonToolQuery, pinnedItems });
 
@@ -210,7 +192,7 @@ describe('EqtlComparisonToolComponent', () => {
   });
 
   it('should ask Pin All for the remaining budget of unpinned eQTLs instead of a page', async () => {
-    const { comparisonToolService, eqtlService } = await setup(mockPage([mockEqtl]));
+    const { comparisonToolService, eqtlService } = await setup(mockPage([eqtlMock]));
     jest.spyOn(comparisonToolService, 'canPinAll').mockReturnValue(true);
     const remainingBudget = comparisonToolService.pinLimit() - comparisonToolService.pinCount();
 
@@ -225,12 +207,12 @@ describe('EqtlComparisonToolComponent', () => {
   });
 
   describe('selected row', () => {
-    const otherEqtl: Eqtl = { ...mockEqtl, composite_id: 'rs2120461~ENSG00000142599~micro' };
-    const newResult: Eqtl = { ...mockEqtl, composite_id: 'rs2120461~ENSG00000142599~oligo' };
+    const otherEqtl: Eqtl = { ...eqtlMock, composite_id: 'rs2120461~ENSG00000142599~micro' };
+    const newResult: Eqtl = { ...eqtlMock, composite_id: 'rs2120461~ENSG00000142599~oligo' };
 
     it('should send the selected row with the unpinned query', async () => {
       const { component, comparisonToolService, eqtlService } = await setup(
-        mockPage([mockEqtl, otherEqtl]),
+        mockPage([eqtlMock, otherEqtl]),
       );
       comparisonToolService.selectRow(otherEqtl.composite_id);
 
@@ -251,7 +233,7 @@ describe('EqtlComparisonToolComponent', () => {
 
     it('should select the first new result when the selected row left the results', async () => {
       const { component, comparisonToolService, eqtlService } = await setup(
-        mockPage([mockEqtl, otherEqtl]),
+        mockPage([eqtlMock, otherEqtl]),
       );
       comparisonToolService.selectRow(otherEqtl.composite_id);
       const answer: EqtlsPage = { ...mockPage([newResult]), selectedRowInResults: false };
@@ -263,7 +245,7 @@ describe('EqtlComparisonToolComponent', () => {
     });
 
     it('should not send the selected row with the Pin All query', async () => {
-      const { comparisonToolService, eqtlService } = await setup(mockPage([mockEqtl, otherEqtl]));
+      const { comparisonToolService, eqtlService } = await setup(mockPage([eqtlMock, otherEqtl]));
       comparisonToolService.selectRow(otherEqtl.composite_id);
       jest.spyOn(comparisonToolService, 'canPinAll').mockReturnValue(true);
 
@@ -275,11 +257,13 @@ describe('EqtlComparisonToolComponent', () => {
     });
   });
 
-  it('renders the sidebar chiclets and tabs', async () => {
-    await setup();
-    expect(screen.getByText('variant:')).toBeInTheDocument();
-    expect(screen.getByText('gene:')).toBeInTheDocument();
-    expect(screen.getByText('cell class:')).toBeInTheDocument();
+  it('shows the first row in the sidebar chiclets, with the sidebar tabs', async () => {
+    const { fixture } = await setup(mockPage([eqtlMock]));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const chicletList = screen.getByRole('list', { name: SIDEBAR_CHICLET_LIST_ARIA_LABEL });
+    expect(within(chicletList).getByText(eqtlMock.variant)).toBeInTheDocument();
+    expect(within(chicletList).getByText(eqtlMock.gene_symbol)).toBeInTheDocument();
     SIDEBAR_TABS.forEach(({ label }) => {
       expect(screen.getByRole('tab', { name: label })).toBeInTheDocument();
     });

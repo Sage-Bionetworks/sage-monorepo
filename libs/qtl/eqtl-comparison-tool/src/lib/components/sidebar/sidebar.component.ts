@@ -1,4 +1,13 @@
-import { Component, ElementRef, inject, signal, viewChildren } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  linkedSignal,
+  signal,
+  viewChildren,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   HttpErrorReportLevelEnum,
@@ -7,6 +16,7 @@ import {
   reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import {
+  Eqtl,
   EqtlPhenotype,
   EqtlPhenotypeQuery,
   EqtlPhenotypeService,
@@ -17,6 +27,7 @@ import { MetadataChicletComponent } from '@sagebionetworks/qtl/ui';
 import {
   findCellClass,
   findCellSubclass,
+  formatGenomicLocation,
   getCellClassMutedColor,
   ResolvedCellSubclass,
   unknownCellClass,
@@ -29,6 +40,7 @@ import {
   ImpactForestPlotComponent,
 } from '../impact/forest-plot/impact-forest-plot.component';
 import { LegendComponent } from '../legend/legend.component';
+import { EqtlComparisonToolService } from '../../services/eqtl-comparison-tool.service';
 import { catchError, EMPTY, map, Observable } from 'rxjs';
 
 export const SIDEBAR_TABS = [
@@ -42,6 +54,8 @@ export const SIDEBAR_CHICLET_LIST_ARIA_LABEL = 'Selected eQTL';
 const UNKNOWN_CELL_CLASS_ID_MESSAGE = 'Unknown cell class ID';
 const UNKNOWN_CELL_SUBCLASS_ID_MESSAGE = 'Unknown cell subclass ID';
 export const EQTL_PHENOTYPE_ERROR_MESSAGE = 'Error loading eQTL phenotype data';
+export const SELECTED_EQTL_NOT_FOUND_MESSAGE = 'Selected eQTL not found in the loaded rows';
+export const SIDEBAR_NO_DATA_MESSAGE = 'No data available';
 
 // TODO(EX-281): take the eQTL from the selected row
 export const SIDEBAR_PLACEHOLDER_PHENOTYPE_QUERY: EqtlPhenotypeQuery = {
@@ -49,6 +63,15 @@ export const SIDEBAR_PLACEHOLDER_PHENOTYPE_QUERY: EqtlPhenotypeQuery = {
   ensemblGeneId: 'ENSG00000142599',
   cellTypeId: 'astro',
 };
+
+interface SelectedEqtlView {
+  variant: string;
+  geneSymbol: string;
+  cellClass: CellClass;
+  cellClassBackgroundColor: string;
+  cellSubclass: ResolvedCellSubclass;
+  impactDetails: ImpactDetails;
+}
 
 interface ImpactPlotData {
   expressionSummaries: GenotypeExpressionSummary[];
@@ -71,34 +94,46 @@ export class SidebarComponent {
   private readonly logger = inject(LoggerService).forSource('SidebarComponent');
   private readonly platformService = inject(PlatformService);
   private readonly eqtlPhenotypeService = inject(EqtlPhenotypeService);
-
-  // TODO: update with dynamically fetched sidebar data
-  protected readonly data = {
-    variant_id: 'rs29475839',
-    hgnc_symbol: 'PAK1',
-    cell_class_id: 'class_astro',
-    cell_subclass_id: 'astro',
-    beta: '.98',
-    p_value: '1.25e-08',
-    variant_location: 'chr:11:54455—252455',
-    gene_location: 'chr:11:54455—252455',
-  };
+  private readonly comparisonToolService = inject(EqtlComparisonToolService);
 
   protected readonly chicletListAriaLabel = SIDEBAR_CHICLET_LIST_ARIA_LABEL;
+  protected readonly noDataMessage = SIDEBAR_NO_DATA_MESSAGE;
 
-  protected readonly cellClass = this.lookUpCellClass(this.data.cell_class_id);
-  protected readonly cellSubclass = this.lookUpCellSubclass(this.data.cell_subclass_id);
+  // Keeps the last matching row, since the selection survives a sort or page change that moves its
+  // row off the rows on screen.
+  private readonly selectedEqtl = linkedSignal<
+    { selectedRowId: string | null; rows: Eqtl[] },
+    Eqtl | undefined
+  >({
+    source: () => ({
+      selectedRowId: this.comparisonToolService.selectedRowId(),
+      rows: [
+        ...this.comparisonToolService.pinnedData(),
+        ...this.comparisonToolService.unpinnedData(),
+      ],
+    }),
+    computation: ({ selectedRowId, rows }, previous) => {
+      if (selectedRowId === null) return undefined;
+      const isSelected = (row: Eqtl) => this.comparisonToolService.rowId(row) === selectedRowId;
+      return (
+        rows.find(isSelected) ??
+        (previous?.value && isSelected(previous.value) ? previous.value : undefined)
+      );
+    },
+  });
+
+  protected readonly selectedEqtlView = computed(() => {
+    const eqtl = this.selectedEqtl();
+    return eqtl && this.toSelectedEqtlView(eqtl);
+  });
+
   protected readonly impactPlotData = toSignal(this.loadImpactPlotData());
 
-  protected readonly cellClassBackgroundColor = getCellClassMutedColor(this.cellClass);
-
-  protected readonly impactDetails: ImpactDetails = {
-    beta: this.data.beta,
-    pValue: this.data.p_value,
-    variantLocation: this.data.variant_location,
-    geneLocation: this.data.gene_location,
-    cellClass: this.cellClass.name,
-  };
+  private readonly reportMissingSelectedEqtl = effect(() => {
+    const selectedRowId = this.comparisonToolService.selectedRowId();
+    if (selectedRowId === null || this.selectedEqtl()) return;
+    this.logger.error(SELECTED_EQTL_NOT_FOUND_MESSAGE, { data: { selectedRowId } });
+  });
 
   protected readonly tabs = SIDEBAR_TABS;
 
@@ -121,31 +156,46 @@ export class SidebarComponent {
     );
   }
 
+  private toSelectedEqtlView(eqtl: Eqtl): SelectedEqtlView {
+    const cellSubclass = this.lookUpCellSubclass(eqtl.cell_type_id, eqtl.composite_id);
+    const { cellClass } = cellSubclass;
+    return {
+      variant: eqtl.variant,
+      geneSymbol: eqtl.gene_symbol,
+      cellClass,
+      cellClassBackgroundColor: getCellClassMutedColor(cellClass),
+      cellSubclass,
+      impactDetails: {
+        beta: String(eqtl.beta),
+        pValue: eqtl.adj_p_val,
+        variantLocation: formatGenomicLocation(eqtl.variant_location),
+        geneLocation: formatGenomicLocation(eqtl.gene_location),
+        cellClass: cellClass.name,
+      },
+    };
+  }
+
   private toImpactPlotData(phenotype: EqtlPhenotype): ImpactPlotData {
     return {
       expressionSummaries: phenotype.expression_summaries,
       effectSizes: phenotype.effect_size_cell_class_data.map((effectSize) => ({
         ...effectSize,
-        color: this.lookUpCellClass(effectSize.cell_type_id).color,
+        color: this.lookUpCellClass(effectSize.cell_type_id, phenotype.variant).color,
       })),
     };
   }
 
-  private lookUpCellClass(cellClassId: string): CellClass {
+  private lookUpCellClass(cellClassId: string, variant: string): CellClass {
     const cellClass = findCellClass(cellClassId);
     if (cellClass) return cellClass;
-    this.logger.error(UNKNOWN_CELL_CLASS_ID_MESSAGE, {
-      data: { cellClassId, variantId: this.data.variant_id },
-    });
+    this.logger.error(UNKNOWN_CELL_CLASS_ID_MESSAGE, { data: { cellClassId, variant } });
     return unknownCellClass(cellClassId);
   }
 
-  private lookUpCellSubclass(cellSubclassId: string): ResolvedCellSubclass {
+  private lookUpCellSubclass(cellSubclassId: string, eqtlId: string): ResolvedCellSubclass {
     const cellSubclass = findCellSubclass(cellSubclassId);
     if (cellSubclass) return cellSubclass;
-    this.logger.error(UNKNOWN_CELL_SUBCLASS_ID_MESSAGE, {
-      data: { cellSubclassId, variantId: this.data.variant_id },
-    });
+    this.logger.error(UNKNOWN_CELL_SUBCLASS_ID_MESSAGE, { data: { cellSubclassId, eqtlId } });
     return unknownCellSubclass(cellSubclassId);
   }
 

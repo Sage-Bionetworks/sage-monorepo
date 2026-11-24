@@ -50,3 +50,11 @@
 .sidebar-impact-forest-plot {
   margin-top: 40px;
 }
+
+.sidebar-no-data {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-style: italic;
+  line-height: 20px;
+}

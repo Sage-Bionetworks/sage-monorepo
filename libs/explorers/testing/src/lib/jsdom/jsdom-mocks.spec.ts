@@ -1,6 +1,7 @@
 import {
   MOCK_CLIENT_HEIGHT_PX,
   MOCK_CLIENT_WIDTH_PX,
+  mockDocumentFonts,
   mockElementClientSize,
   mockResizeObserver,
   mockSvgGetBBox,
@@ -40,6 +41,15 @@ describe('jsdom mocks', () => {
     });
   });
 
+  describe('with mockDocumentFonts', () => {
+    mockDocumentFonts();
+
+    it('should provide fonts that have all loaded', async () => {
+      await expect(document.fonts.ready).resolves.toBeUndefined();
+      expect(document.fonts.check('12px sans-serif')).toBe(true);
+    });
+  });
+
   describe('after the mocked tests', () => {
     it('should restore jsdom client size and remove the stubs', () => {
       const element = document.createElement('div');
@@ -48,6 +58,7 @@ describe('jsdom mocks', () => {
       expect(element.clientWidth).toBe(0);
       expect('getBBox' in document.createElementNS(SVG_NAMESPACE, 'rect')).toBe(false);
       expect(typeof ResizeObserver).toBe('undefined');
+      expect(document.fonts).toBeUndefined();
     });
   });
 });
