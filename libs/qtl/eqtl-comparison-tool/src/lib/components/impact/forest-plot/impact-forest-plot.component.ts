@@ -6,7 +6,9 @@ import {
   GridLineStyle,
 } from '@sagebionetworks/explorers/charts';
 import { ForestPlotDirective } from '@sagebionetworks/explorers/charts-angular';
+import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { CellClassEffectSize } from '@sagebionetworks/qtl/api-client';
+import { impactPlotLoadingLabel } from '../impact-plot-loading';
 import { computeEffectSizeXAxis } from './impact-forest-plot-x-axis';
 import {
   IMPACT_FOREST_PLOT_CI_LINE_WIDTH_PX,
@@ -36,7 +38,7 @@ function toCategoryLabel(effectSize: CellClassEffectSize): string {
 
 @Component({
   selector: 'qtl-eqtl-comparison-tool-impact-forest-plot',
-  imports: [ForestPlotDirective],
+  imports: [ForestPlotDirective, LoadingIconComponent],
   templateUrl: './impact-forest-plot.component.html',
   styleUrls: ['./impact-forest-plot.component.scss'],
 })
@@ -44,8 +46,10 @@ export class ImpactForestPlotComponent {
   selectedCellClassId = input.required<string>();
   // TODO: confirm whether cell class or cell subclass effect sizes drive this plot (EX-283)
   effectSizes = input.required<ColoredCellClassEffectSize[]>();
+  isLoading = input(false);
 
   protected readonly title = IMPACT_FOREST_PLOT_TITLE;
+  protected readonly loadingLabel = impactPlotLoadingLabel(IMPACT_FOREST_PLOT_TITLE);
   protected readonly xAxisTitle = IMPACT_FOREST_PLOT_X_AXIS_TITLE;
   protected readonly chartHeight = IMPACT_FOREST_PLOT_CHART_HEIGHT_PX;
   protected readonly plotAreaMargins = IMPACT_FOREST_PLOT_PLOT_AREA_MARGINS;

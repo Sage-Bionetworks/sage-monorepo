@@ -8,24 +8,25 @@ import {
   provideComparisonToolService,
   SourceLogger,
 } from '@sagebionetworks/explorers/services';
+import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { Eqtl, EqtlPhenotype, EqtlPhenotypeService } from '@sagebionetworks/qtl/api-client';
 import { eqtlMock, eqtlPhenotypeMock } from '@sagebionetworks/qtl/testing';
 import { formatGenomicLocation, resolveCellSubclass } from '@sagebionetworks/qtl/util';
 import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
-import { Observable, of, throwError } from 'rxjs';
+import { NEVER, Observable, of, Subject, throwError } from 'rxjs';
 import { EqtlComparisonToolService } from '../../services/eqtl-comparison-tool.service';
 import { IMPACT_BOXPLOT_TITLE_PREFIX } from '../impact/boxplot/impact-boxplot.constants';
 import { IMPACT_DETAIL_FIELDS } from '../impact/details/impact-details.component';
 import { IMPACT_FOREST_PLOT_TITLE } from '../impact/forest-plot/impact-forest-plot.constants';
+import { impactPlotLoadingLabel } from '../impact/impact-plot-loading';
 import { LEGEND_CELL_CLASSES_TITLE } from '../legend/legend.constants';
 import {
   EQTL_PHENOTYPE_ERROR_MESSAGE,
   SELECTED_EQTL_NOT_FOUND_MESSAGE,
   SIDEBAR_CHICLET_LIST_ARIA_LABEL,
   SIDEBAR_NO_DATA_MESSAGE,
-  SIDEBAR_PLACEHOLDER_PHENOTYPE_QUERY,
   SIDEBAR_TABS,
   SidebarComponent,
 } from './sidebar.component';
@@ -50,6 +51,17 @@ const microgliaEqtl: Eqtl = {
 const astrocyteSubclass = resolveCellSubclass('astro');
 const microgliaSubclass = resolveCellSubclass('micropvm');
 
+const astrocytePlotLoadingLabels = [
+  impactPlotLoadingLabel(`${IMPACT_BOXPLOT_TITLE_PREFIX} (${astrocyteSubclass.name})`),
+  impactPlotLoadingLabel(IMPACT_FOREST_PLOT_TITLE),
+];
+
+const PHENOTYPE_REQUEST_URL = 'https://xqtlexplorer.adknowledgeportal.org/api/v1/eqtl-phenotype';
+
+function buildPhenotypeRequestError(status: HttpStatusCode): HttpRequestError {
+  return new HttpRequestError(new HttpErrorResponse({ status, url: PHENOTYPE_REQUEST_URL }), 'GET');
+}
+
 async function setup({
   rows = [eqtlMock],
   phenotypeResponse = of(eqtlPhenotypeMock),
@@ -66,6 +78,7 @@ async function setup({
     providers: [
       provideNoopAnimations(),
       MessageService,
+      provideLoadingIconColors(),
       ...provideComparisonToolService({
         viewConfig: { rowIdDataKey: 'composite_id', rowSelectionEnabled: true },
       }),
@@ -98,6 +111,12 @@ function queryImpactPlots() {
     }),
     forestPlot: within(impactPanel).queryByRole('figure', { name: IMPACT_FOREST_PLOT_TITLE }),
   };
+}
+
+function getPlotLoadingStatusNames(): (string | null)[] {
+  return within(screen.getByRole('tabpanel'))
+    .queryAllByRole('status')
+    .map((status) => status.getAttribute('aria-label'));
 }
 
 function getChicletTexts(): string[] {
@@ -168,16 +187,24 @@ describe('SidebarComponent', () => {
     });
   });
 
-  it('requests the phenotype data of the eQTL', async () => {
+  it("requests the selected row's phenotype data", async () => {
     const { mockEqtlPhenotypeService } = await setup();
-    expect(mockEqtlPhenotypeService.getEqtlPhenotype).toHaveBeenCalledWith(
-      SIDEBAR_PLACEHOLDER_PHENOTYPE_QUERY,
-    );
+    expect(mockEqtlPhenotypeService.getEqtlPhenotype).toHaveBeenCalledWith({
+      variant: eqtlMock.variant,
+      ensemblGeneId: eqtlMock.ensembl_gene_id,
+      cellTypeId: eqtlMock.cell_type_id,
+    });
+  });
+
+  it('shows a named loading status in each plot while the plot data loads', async () => {
+    await setup({ phenotypeResponse: NEVER });
+    expect(getPlotLoadingStatusNames()).toEqual(astrocytePlotLoadingLabels);
   });
 
   it('shows the expression-by-genotype boxplot in the Impact tab, for the same cell subclass as the chiclet', async () => {
     await setup();
     expect(queryImpactPlots().boxplot).toBeVisible();
+    expect(getPlotLoadingStatusNames()).toEqual([]);
   });
 
   it('shows the effect sizes by cell class plot in the Impact tab', async () => {
@@ -185,20 +212,62 @@ describe('SidebarComponent', () => {
     expect(queryImpactPlots().forestPlot).toBeVisible();
   });
 
-  it('does not request the phenotype data or show the plots on the server', async () => {
-    const { mockEqtlPhenotypeService } = await setup({ platformService: serverPlatform });
-    expect(mockEqtlPhenotypeService.getEqtlPhenotype).not.toHaveBeenCalled();
-    expect(queryImpactPlots()).toEqual({ boxplot: null, forestPlot: null });
+  it("requests the new row's plot data on a row switch, showing the loading status until it loads", async () => {
+    const { mockEqtlPhenotypeService, selectRow } = await setup({
+      rows: [eqtlMock, microgliaEqtl],
+    });
+    mockEqtlPhenotypeService.getEqtlPhenotype.mockReturnValueOnce(NEVER);
+
+    await selectRow(microgliaEqtl.composite_id);
+
+    expect(mockEqtlPhenotypeService.getEqtlPhenotype).toHaveBeenLastCalledWith({
+      variant: microgliaEqtl.variant,
+      ensemblGeneId: microgliaEqtl.ensembl_gene_id,
+      cellTypeId: microgliaEqtl.cell_type_id,
+    });
+    expect(getPlotLoadingStatusNames()).toEqual([
+      impactPlotLoadingLabel(`${IMPACT_BOXPLOT_TITLE_PREFIX} (${microgliaSubclass.name})`),
+      impactPlotLoadingLabel(IMPACT_FOREST_PLOT_TITLE),
+    ]);
   });
 
-  it('reports a failed phenotype request and leaves out the plots', async () => {
-    const error = new HttpRequestError(
-      new HttpErrorResponse({
-        status: HttpStatusCode.NotFound,
-        url: 'https://xqtlexplorer.adknowledgeportal.org/api/v1/eqtl-phenotype',
-      }),
-      'GET',
+  it('cancels the earlier plot data request when another row is selected before it loads', async () => {
+    const earlierPhenotypeResponse = new Subject<EqtlPhenotype>();
+    const { selectRow, mockEqtlPhenotypeService } = await setup({
+      rows: [eqtlMock, microgliaEqtl],
+      phenotypeResponse: earlierPhenotypeResponse,
+    });
+    mockEqtlPhenotypeService.getEqtlPhenotype.mockReturnValueOnce(NEVER);
+    expect(earlierPhenotypeResponse.observed).toBe(true);
+
+    await selectRow(microgliaEqtl.composite_id);
+
+    expect(earlierPhenotypeResponse.observed).toBe(false);
+  });
+
+  it('does not request the phenotype data on the server', async () => {
+    const { mockEqtlPhenotypeService } = await setup({ platformService: serverPlatform });
+    expect(mockEqtlPhenotypeService.getEqtlPhenotype).not.toHaveBeenCalled();
+  });
+
+  it('reports a row with no plot data as a warning and shows the plots without data', async () => {
+    const error = buildPhenotypeRequestError(HttpStatusCode.NotFound);
+    const loggerWarn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+
+    await setup({ phenotypeResponse: throwError(() => error) });
+
+    expect(loggerWarn).toHaveBeenCalledWith(
+      formatHttpErrorReportMessage(EQTL_PHENOTYPE_ERROR_MESSAGE, error),
+      expect.anything(),
+      error,
     );
+    expect(queryImpactPlots().boxplot).toBeVisible();
+    expect(queryImpactPlots().forestPlot).toBeVisible();
+    expect(getPlotLoadingStatusNames()).toEqual([]);
+  });
+
+  it('reports any other failed plot data request as an error and shows the plots without data', async () => {
+    const error = buildPhenotypeRequestError(HttpStatusCode.ServiceUnavailable);
     const loggerError = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
 
     await setup({ phenotypeResponse: throwError(() => error) });
@@ -207,7 +276,8 @@ describe('SidebarComponent', () => {
       formatHttpErrorReportMessage(EQTL_PHENOTYPE_ERROR_MESSAGE, error),
       expect.objectContaining({ error }),
     );
-    expect(queryImpactPlots()).toEqual({ boxplot: null, forestPlot: null });
+    expect(queryImpactPlots().boxplot).toBeVisible();
+    expect(getPlotLoadingStatusNames()).toEqual([]);
   });
 
   it('renders the Impact and Legend tab headers', async () => {

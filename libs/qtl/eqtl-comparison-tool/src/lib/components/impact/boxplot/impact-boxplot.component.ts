@@ -7,6 +7,7 @@ import {
   TooltipStyle,
 } from '@sagebionetworks/explorers/charts';
 import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
+import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { GenotypeExpressionSummary } from '@sagebionetworks/qtl/api-client';
 import { ResolvedCellSubclass } from '@sagebionetworks/qtl/util';
 import {
@@ -15,10 +16,11 @@ import {
   IMPACT_BOXPLOT_PLOT_AREA_MARGINS,
   IMPACT_BOXPLOT_TITLE_PREFIX,
 } from './impact-boxplot.constants';
+import { impactPlotLoadingLabel } from '../impact-plot-loading';
 
 @Component({
   selector: 'qtl-eqtl-comparison-tool-impact-boxplot',
-  imports: [BoxplotDirective],
+  imports: [BoxplotDirective, LoadingIconComponent],
   templateUrl: './impact-boxplot.component.html',
   styleUrls: ['./impact-boxplot.component.scss'],
 })
@@ -26,6 +28,7 @@ export class ImpactBoxplotComponent {
   cellSubclass = input.required<ResolvedCellSubclass>();
   // Plotted in the given order, labeled by each summary's genotype.
   expressionSummaries = input.required<GenotypeExpressionSummary[]>();
+  isLoading = input(false);
 
   protected readonly titlePrefix = IMPACT_BOXPLOT_TITLE_PREFIX;
   protected readonly chartHeight = IMPACT_BOXPLOT_CHART_HEIGHT_PX;
@@ -55,6 +58,8 @@ export class ImpactBoxplotComponent {
   protected readonly ariaLabel = computed(
     () => `${this.titlePrefix} (${this.cellSubclass().name})`,
   );
+
+  protected readonly loadingLabel = computed(() => impactPlotLoadingLabel(this.ariaLabel()));
 
   readonly genotypes = computed(() =>
     this.expressionSummaries().map((summary) => summary.genotype),

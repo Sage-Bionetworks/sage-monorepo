@@ -5,3 +5,9 @@
   line-height: normal;
   text-align: center;
 }
+
+@mixin chart-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

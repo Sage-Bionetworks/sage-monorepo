@@ -23,3 +23,18 @@ export const LongSubclassName: Story = {
     expressionSummaries: eqtlPhenotypeMock.expression_summaries,
   },
 };
+
+export const Loading: Story = {
+  args: {
+    cellSubclass: resolveCellSubclass('astro'),
+    expressionSummaries: [],
+    isLoading: true,
+  },
+};
+
+export const NoData: Story = {
+  args: {
+    cellSubclass: resolveCellSubclass('astro'),
+    expressionSummaries: [],
+  },
+};

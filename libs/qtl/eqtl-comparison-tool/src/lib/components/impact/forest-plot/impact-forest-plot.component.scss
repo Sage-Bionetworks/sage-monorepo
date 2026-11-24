@@ -17,3 +17,7 @@
 
   margin: 0;
 }
+
+.impact-forest-plot-loading {
+  @include mixins.chart-loading;
+}

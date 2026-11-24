@@ -57,18 +57,19 @@
     @case ('impact') {
       @if (selectedEqtlView(); as eqtl) {
         <qtl-eqtl-comparison-tool-impact-details [details]="eqtl.impactDetails" />
-        @if (impactPlotData(); as plotData) {
-          <qtl-eqtl-comparison-tool-impact-boxplot
-            class="sidebar-impact-boxplot"
-            [cellSubclass]="eqtl.cellSubclass"
-            [expressionSummaries]="plotData.expressionSummaries"
-          />
-          <qtl-eqtl-comparison-tool-impact-forest-plot
-            class="sidebar-impact-forest-plot"
-            [selectedCellClassId]="eqtl.cellSubclass.cellClassId"
-            [effectSizes]="plotData.effectSizes"
-          />
-        }
+        @let plotData = impactPlotData();
+        <qtl-eqtl-comparison-tool-impact-boxplot
+          class="sidebar-impact-boxplot"
+          [cellSubclass]="eqtl.cellSubclass"
+          [expressionSummaries]="plotData?.expressionSummaries ?? []"
+          [isLoading]="!plotData"
+        />
+        <qtl-eqtl-comparison-tool-impact-forest-plot
+          class="sidebar-impact-forest-plot"
+          [selectedCellClassId]="eqtl.cellSubclass.cellClassId"
+          [effectSizes]="plotData?.effectSizes ?? []"
+          [isLoading]="!plotData"
+        />
         <!-- TODO: add the remaining impact tab content (EX-73) -->
       } @else {
         <p class="sidebar-no-data">{{ noDataMessage }}</p>

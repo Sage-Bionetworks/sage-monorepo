@@ -1,31 +1,42 @@
 <figure class="impact-forest-plot" [attr.aria-label]="title">
   <!-- TODO: add the info tooltip once its wiki ID exists (EX-284) -->
   <figcaption class="impact-forest-plot-title">{{ title }}</figcaption>
-  <div
-    sageForestPlot
-    class="impact-forest-plot-chart"
-    [style.height.px]="chartHeight"
-    [items]="items()"
-    [selectedYAxisCategory]="selectedCategory()"
-    [xAxisMin]="xAxis().min"
-    [xAxisMax]="xAxis().max"
-    [xAxisInterval]="xAxis().interval"
-    [xAxisLabelPrecision]="xAxis().labelPrecision"
-    [yAxisLabelTooltipFormatter]="categoryTooltipFormatter"
-    [pointTooltipFormatter]="pointTooltipFormatter"
-    [pointSize]="pointSize"
-    [ciLineWidth]="ciLineWidth"
-    [showCILineTooltip]="true"
-    [showZeroLine]="false"
-    [xAxisLineStyle]="axisLineStyle"
-    [yAxisLineStyle]="axisLineStyle"
-    [xAxisTickLabelStyle]="xAxisTickLabelStyle"
-    [yAxisTickLabelStyle]="yAxisTickLabelStyle"
-    [xAxisGridLineStyle]="xAxisGridLineStyle"
-    [yAxisGridLineStyle]="yAxisGridLineStyle"
-    [rowHoverHighlightStyle]="rowHoverHighlightStyle"
-    [tooltipStyle]="tooltipStyle"
-    [plotAreaMargins]="plotAreaMargins"
-  ></div>
-  <p class="impact-forest-plot-x-axis-title">{{ xAxisTitle }}</p>
+  @if (isLoading()) {
+    <div
+      class="impact-forest-plot-loading"
+      role="status"
+      [attr.aria-label]="loadingLabel"
+      [style.height.px]="chartHeight"
+    >
+      <explorers-loading-icon />
+    </div>
+  } @else {
+    <div
+      sageForestPlot
+      class="impact-forest-plot-chart"
+      [style.height.px]="chartHeight"
+      [items]="items()"
+      [selectedYAxisCategory]="selectedCategory()"
+      [xAxisMin]="xAxis().min"
+      [xAxisMax]="xAxis().max"
+      [xAxisInterval]="xAxis().interval"
+      [xAxisLabelPrecision]="xAxis().labelPrecision"
+      [yAxisLabelTooltipFormatter]="categoryTooltipFormatter"
+      [pointTooltipFormatter]="pointTooltipFormatter"
+      [pointSize]="pointSize"
+      [ciLineWidth]="ciLineWidth"
+      [showCILineTooltip]="true"
+      [showZeroLine]="false"
+      [xAxisLineStyle]="axisLineStyle"
+      [yAxisLineStyle]="axisLineStyle"
+      [xAxisTickLabelStyle]="xAxisTickLabelStyle"
+      [yAxisTickLabelStyle]="yAxisTickLabelStyle"
+      [xAxisGridLineStyle]="xAxisGridLineStyle"
+      [yAxisGridLineStyle]="yAxisGridLineStyle"
+      [rowHoverHighlightStyle]="rowHoverHighlightStyle"
+      [tooltipStyle]="tooltipStyle"
+      [plotAreaMargins]="plotAreaMargins"
+    ></div>
+    <p class="impact-forest-plot-x-axis-title">{{ xAxisTitle }}</p>
+  }
 </figure>

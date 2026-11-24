@@ -8,9 +8,10 @@ import {
   signal,
   viewChildren,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   HttpErrorReportLevelEnum,
+  isNotFoundError,
   LoggerService,
   PlatformService,
   reportHttpError,
@@ -41,7 +42,16 @@ import {
 } from '../impact/forest-plot/impact-forest-plot.component';
 import { LegendComponent } from '../legend/legend.component';
 import { EqtlComparisonToolService } from '../../services/eqtl-comparison-tool.service';
-import { catchError, EMPTY, map, Observable } from 'rxjs';
+import {
+  catchError,
+  distinctUntilChanged,
+  EMPTY,
+  filter,
+  map,
+  Observable,
+  of,
+  switchMap,
+} from 'rxjs';
 
 export const SIDEBAR_TABS = [
   { value: 'impact', label: 'Impact' },
@@ -57,13 +67,6 @@ export const EQTL_PHENOTYPE_ERROR_MESSAGE = 'Error loading eQTL phenotype data';
 export const SELECTED_EQTL_NOT_FOUND_MESSAGE = 'Selected eQTL not found in the loaded rows';
 export const SIDEBAR_NO_DATA_MESSAGE = 'No data available';
 
-// TODO(EX-281): take the eQTL from the selected row
-export const SIDEBAR_PLACEHOLDER_PHENOTYPE_QUERY: EqtlPhenotypeQuery = {
-  variant: 'rs2120461',
-  ensemblGeneId: 'ENSG00000142599',
-  cellTypeId: 'astro',
-};
-
 interface SelectedEqtlView {
   variant: string;
   geneSymbol: string;
@@ -76,6 +79,22 @@ interface SelectedEqtlView {
 interface ImpactPlotData {
   expressionSummaries: GenotypeExpressionSummary[];
   effectSizes: ColoredCellClassEffectSize[];
+}
+
+// Empty data draws each chart's no-data state.
+const NO_IMPACT_PLOT_DATA: ImpactPlotData = { expressionSummaries: [], effectSizes: [] };
+
+interface LoadedImpactPlotData {
+  eqtlId: string;
+  plotData: ImpactPlotData;
+}
+
+function toEqtlPhenotypeQuery(eqtl: Eqtl): EqtlPhenotypeQuery {
+  return {
+    variant: eqtl.variant,
+    ensemblGeneId: eqtl.ensembl_gene_id,
+    cellTypeId: eqtl.cell_type_id,
+  };
 }
 
 @Component({
@@ -127,7 +146,18 @@ export class SidebarComponent {
     return eqtl && this.toSelectedEqtlView(eqtl);
   });
 
-  protected readonly impactPlotData = toSignal(this.loadImpactPlotData());
+  private readonly loadedImpactPlotData = toSignal(this.loadImpactPlotData());
+
+  // Undefined while the selected row's plot data loads. Matched by row, so a row switch never shows
+  // the previous row's plots.
+  protected readonly impactPlotData = computed(() => {
+    const eqtl = this.selectedEqtl();
+    const loaded = this.loadedImpactPlotData();
+    if (!eqtl || !loaded || loaded.eqtlId !== this.comparisonToolService.rowId(eqtl)) {
+      return undefined;
+    }
+    return loaded.plotData;
+  });
 
   private readonly reportMissingSelectedEqtl = effect(() => {
     const selectedRowId = this.comparisonToolService.selectedRowId();
@@ -141,17 +171,32 @@ export class SidebarComponent {
 
   private readonly tabButtons = viewChildren<ElementRef<HTMLButtonElement>>('tabButton');
 
-  private loadImpactPlotData(): Observable<ImpactPlotData> {
+  private loadImpactPlotData(): Observable<LoadedImpactPlotData> {
     if (!this.platformService.isBrowser) return EMPTY;
 
-    return this.eqtlPhenotypeService.getEqtlPhenotype(SIDEBAR_PLACEHOLDER_PHENOTYPE_QUERY).pipe(
+    return toObservable(this.selectedEqtl).pipe(
+      filter((eqtl): eqtl is Eqtl => eqtl !== undefined),
+      map((eqtl) => ({ eqtl, eqtlId: this.comparisonToolService.rowId(eqtl) })),
+      distinctUntilChanged((previous, current) => previous.eqtlId === current.eqtlId),
+      // switchMap cancels the request for a row that's no longer selected.
+      switchMap(({ eqtl, eqtlId }) =>
+        this.fetchImpactPlotData(eqtl).pipe(map((plotData) => ({ eqtlId, plotData }))),
+      ),
+    );
+  }
+
+  private fetchImpactPlotData(eqtl: Eqtl): Observable<ImpactPlotData> {
+    return this.eqtlPhenotypeService.getEqtlPhenotype(toEqtlPhenotypeQuery(eqtl)).pipe(
       map((phenotype) => this.toImpactPlotData(phenotype)),
       catchError((error) => {
+        // Not every eQTL has phenotype data, so a 404 may not be a data error.
         reportHttpError(this.logger, EQTL_PHENOTYPE_ERROR_MESSAGE, {
           error,
-          level: HttpErrorReportLevelEnum.Error,
+          level: isNotFoundError(error)
+            ? HttpErrorReportLevelEnum.Warn
+            : HttpErrorReportLevelEnum.Error,
         });
-        return EMPTY;
+        return of(NO_IMPACT_PLOT_DATA);
       }),
     );
   }
