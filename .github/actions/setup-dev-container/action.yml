@@ -5,6 +5,12 @@ inputs:
     description: 'The dev container user.'
     required: false
     default: 'ubuntu'
+  gradle-cache:
+    description: >-
+      How to use the Gradle dependency cache: 'read-write' restores and saves it, 'read-only' only
+      restores it, and 'none' skips it. Runs triggered by pull_request_target never save it.
+    required: false
+    default: 'read-write'
 outputs:
   affected_projects:
     description: 'The list of affected Nx projects as a comma separated string.'
@@ -36,15 +42,60 @@ runs:
     #       **/.venv
     #     key: ${{ runner.os }}-venv-${{ hashFiles('**/uv.lock') }}
 
-    # - name: Set up Gradle cache
-    #   uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c #v3.5.0
-    #   with:
-    #     path: |
-    #       /tmp/.gradle/caches
-    #       /tmp/.gradle/wrapper
-    #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-gradle-
+    # Nx builds the Gradle project graph in every job, so without this cache each job downloads the
+    # buildSrc plugins, and parallel jobs get rate limited (HTTP 429).
+    # Only modules-2 (downloaded dependencies) is cached because gradle/verification-metadata.xml
+    # re-checks those on every build. The unpacked wrapper distribution (checksum-checked only on
+    # download) and Gradle's derived caches (compiled scripts, transformed jars) are never verified,
+    # so they are rebuilt in every job instead.
+    # pull_request_target runs fork PR code in the base branch's cache scope, so it is capped at
+    # read-only: saving there would let a PR plant files that main and release builds restore.
+    - name: Define the Gradle cache
+      id: gradle-cache
+      shell: bash
+      env:
+        REQUESTED_MODE: ${{ inputs.gradle-cache }}
+        EVENT_NAME: ${{ github.event_name }}
+        CACHE_KEY_PREFIX: ${{ runner.os }}-gradle-modules-
+        CACHE_KEY_HASH: ${{ hashFiles('**/*.gradle.kts', 'gradle/libs.versions.toml', 'gradle/verification-metadata.xml') }}
+      run: |
+        case "${REQUESTED_MODE}" in
+          read-write | read-only | none) mode="${REQUESTED_MODE}" ;;
+          *)
+            echo "::error title=Invalid gradle-cache input::Expected read-write, read-only or none, got '${REQUESTED_MODE}'."
+            exit 1
+            ;;
+        esac
+        if [[ "${EVENT_NAME}" == "pull_request_target" && "${mode}" == "read-write" ]]; then
+          mode="read-only"
+        fi
+        echo "Gradle cache mode: ${mode}"
+        {
+          echo "mode=${mode}"
+          echo "key-prefix=${CACHE_KEY_PREFIX}"
+          echo "key=${CACHE_KEY_PREFIX}${CACHE_KEY_HASH}"
+          echo "paths<<EOF"
+          echo "/tmp/.gradle/caches/modules-2"
+          echo "!/tmp/.gradle/caches/modules-2/*.lock"
+          echo "!/tmp/.gradle/caches/modules-2/gc.properties"
+          echo "EOF"
+        } >> "${GITHUB_OUTPUT}"
+
+    - name: Restore and save the Gradle cache
+      if: steps.gradle-cache.outputs.mode == 'read-write'
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ steps.gradle-cache.outputs.paths }}
+        key: ${{ steps.gradle-cache.outputs.key }}
+        restore-keys: ${{ steps.gradle-cache.outputs.key-prefix }}
+
+    - name: Restore the Gradle cache (read-only)
+      if: steps.gradle-cache.outputs.mode == 'read-only'
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ steps.gradle-cache.outputs.paths }}
+        key: ${{ steps.gradle-cache.outputs.key }}
+        restore-keys: ${{ steps.gradle-cache.outputs.key-prefix }}
 
     - name: Install the Dev Container CLI
       shell: bash
