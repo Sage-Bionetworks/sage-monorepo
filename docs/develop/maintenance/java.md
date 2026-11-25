@@ -447,6 +447,7 @@ Upgrading Gradle keeps build performance, security, and deprecation coverage cur
    - `gradle/wrapper/gradle-wrapper.properties` updated (distributionUrl points to `gradle-9.1.0-bin.zip`)
    - `gradlew` / `gradlew.bat` updated (commit them)
    - Do not manually edit wrapper JAR/scripts; regenerate if unexpected
+   - If `gradle/wrapper/gradle-wrapper.jar` changed, commit it too. The **Validate Gradle wrapper** CI check fails unless the JAR matches an official Gradle release.
 4. Verify version:
 
    ```bash
@@ -495,7 +496,7 @@ Upgrading Gradle keeps build performance, security, and deprecation coverage cur
 
 #### Post‑Upgrade Validation
 
-- [ ] CI pipelines green
+- [ ] CI pipelines green, including the **Validate Gradle wrapper** check
 - [ ] No new flaky tests introduced
 - [ ] (If using scans) No major regression in configuration time
 - [ ] Team notified to clear local caches only if necessary
@@ -517,6 +518,8 @@ git commit -m "revert: downgrade Gradle to <previous-version> (regression)"
 !!! tip "Wrapper Integrity"
 
     Always regenerate rather than manually editing wrapper files to ensure checksum authenticity.
+
+    The wrapper JAR is a committed binary that every Gradle job runs, and reviewers cannot read its diff. The [Validate Gradle wrapper](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/.github/workflows/validate-gradle-wrapper.yml) workflow runs on every PR and push to `main`. It uses Gradle's [`wrapper-validation`](https://github.com/gradle/actions/tree/main/wrapper-validation) action to check every `gradle-wrapper.jar` against Gradle's published checksums. Checks that Gradle runs itself, such as a distribution checksum or dependency verification, run inside the wrapper, so they cannot detect a tampered wrapper JAR.
 
 ### Updating Java (Placeholder)
 
