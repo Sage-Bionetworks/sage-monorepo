@@ -137,6 +137,76 @@ describe('Service: ComparisonToolHelper', () => {
     ]);
   });
 
+  describe('object-valued text columns', () => {
+    const locationConfig: ComparisonToolConfig = {
+      page: 'eQTLs',
+      dropdowns: [],
+      row_count: '2',
+      columns: [
+        { type: 'primary', data_key: 'variant', is_exported: true, is_hidden: false },
+        { type: 'text', data_key: 'variant_location', is_exported: true, is_hidden: true },
+        { type: 'text', data_key: 'gene_symbol', is_exported: true, is_hidden: false },
+      ],
+      filters: [],
+    };
+
+    const buildCsv = (data: Record<string, unknown>[]) =>
+      ctHelperService.buildComparisonToolCsvRows(data, locationConfig, 'https://example.org');
+
+    it('should export each subfield as its own column in place of the object column', () => {
+      const csvData = buildCsv([
+        {
+          variant: 'rs78000356',
+          variant_location: { chr: '11', start: 82717576, end: 82717577 },
+          gene_symbol: 'MIR4300HG',
+        },
+      ]);
+
+      expect(csvData).toEqual([
+        [
+          'variant',
+          'variant_location.chr',
+          'variant_location.start',
+          'variant_location.end',
+          'gene_symbol',
+        ],
+        ['rs78000356', '11', '82717576', '82717577', 'MIR4300HG'],
+      ]);
+    });
+
+    it('should leave the subfield cells empty for a row without the object', () => {
+      const csvData = buildCsv([
+        { variant: 'rs1', variant_location: null, gene_symbol: 'GENE1' },
+        {
+          variant: 'rs2',
+          variant_location: { chr: '4', start: 67714205, end: 67714206 },
+          gene_symbol: 'GENE2',
+        },
+      ]);
+
+      expect(csvData).toEqual([
+        [
+          'variant',
+          'variant_location.chr',
+          'variant_location.start',
+          'variant_location.end',
+          'gene_symbol',
+        ],
+        ['rs1', '', '', '', 'GENE1'],
+        ['rs2', '4', '67714205', '67714206', 'GENE2'],
+      ]);
+    });
+
+    it('should keep a text column without objects as one column', () => {
+      const csvData = buildCsv([{ variant: 'rs1', variant_location: null, gene_symbol: 'GENE1' }]);
+
+      expect(csvData).toEqual([
+        ['variant', 'variant_location', 'gene_symbol'],
+        ['rs1', '', 'GENE1'],
+      ]);
+    });
+  });
+
   describe('getSelectedFilters', () => {
     it('should return empty object when no filters have selected options', () => {
       const filters: ComparisonToolFilter[] = [

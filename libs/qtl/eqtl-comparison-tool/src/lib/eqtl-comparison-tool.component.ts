@@ -54,7 +54,6 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     rowSelectionEnabled: true,
     rowHoverEnabled: true,
     // TODO(EX-287): round the Beta and MAF columns on screen
-    // TODO(EX-295): the pinned CSV exports variant_location and gene_location as "[object Object]" until the CT can export location columns
     // TODO(EX-298): link the xQTL docs from the Download Pins menu once the resources page has content
     // TODO(EX-279): hide the view details button; the eQTL CT has no details page
     // TODO(EX-83): clicking a row's Pin or other controls should not select the row
