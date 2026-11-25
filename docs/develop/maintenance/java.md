@@ -439,12 +439,13 @@ Upgrading Gradle keeps build performance, security, and deprecation coverage cur
    ```bash
    ./gradlew clean build
    ```
-2. Regenerate wrapper:
+2. Regenerate wrapper, pinning the distribution checksum published on the [Gradle release checksums](https://gradle.org/release-checksums/) page (the `-bin.zip` "Binary-only" checksum):
    ```bash
-   ./gradlew wrapper --gradle-version 9.1.0 --distribution-type bin
+   ./gradlew wrapper --gradle-version 9.1.0 --distribution-type bin \
+     --gradle-distribution-sha256-sum <sha256-of-gradle-9.1.0-bin.zip>
    ```
 3. Inspect changes:
-   - `gradle/wrapper/gradle-wrapper.properties` updated (distributionUrl points to `gradle-9.1.0-bin.zip`)
+   - `gradle/wrapper/gradle-wrapper.properties` updated (distributionUrl points to `gradle-9.1.0-bin.zip`, distributionSha256Sum matches the published checksum)
    - `gradlew` / `gradlew.bat` updated (commit them)
    - Do not manually edit wrapper JAR/scripts; regenerate if unexpected
 4. Verify version:
@@ -505,7 +506,8 @@ Upgrading Gradle keeps build performance, security, and deprecation coverage cur
 If a blocking issue appears:
 
 ```bash
-./gradlew wrapper --gradle-version <previous-version> --distribution-type bin
+./gradlew wrapper --gradle-version <previous-version> --distribution-type bin \
+  --gradle-distribution-sha256-sum <sha256-of-previous-version-bin.zip>
 git add gradle/wrapper/gradle-wrapper.properties gradlew gradlew.bat
 git commit -m "revert: downgrade Gradle to <previous-version> (regression)"
 ```
@@ -517,6 +519,9 @@ git commit -m "revert: downgrade Gradle to <previous-version> (regression)"
 !!! tip "Wrapper Integrity"
 
     Always regenerate rather than manually editing wrapper files to ensure checksum authenticity.
+    The wrapper refuses to run a downloaded distribution whose SHA-256 does not match
+    `distributionSha256Sum`, so a stale checksum fails every build and CI job until fixed. Never drop
+    the checksum to unblock a build; dropping it silently disables verification.
 
 ### Updating Java (Placeholder)
 
