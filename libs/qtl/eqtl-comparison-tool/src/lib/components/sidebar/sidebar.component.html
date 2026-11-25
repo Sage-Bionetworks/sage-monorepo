@@ -1,30 +1,32 @@
-<div class="sidebar-chiclets" role="list" [attr.aria-label]="chicletListAriaLabel">
-  <qtl-metadata-chiclet
-    role="listitem"
-    backgroundColor="var(--color-variant-muted)"
-    label="variant"
-    [value]="data.variant_id"
-  />
-  <qtl-metadata-chiclet
-    role="listitem"
-    backgroundColor="var(--color-gene-muted)"
-    label="gene"
-    [value]="data.hgnc_symbol"
-  />
-  <qtl-metadata-chiclet
-    role="listitem"
-    [backgroundColor]="cellClassBackgroundColor"
-    label="cell class"
-    [value]="cellClass.name"
-  />
-  <qtl-metadata-chiclet
-    role="listitem"
-    [backgroundColor]="cellSubclass.color"
-    textColor="var(--color-white)"
-    label="cell subclass"
-    [value]="cellSubclass.name"
-  />
-</div>
+@if (selectedEqtlView(); as eqtl) {
+  <div class="sidebar-chiclets" role="list" [attr.aria-label]="chicletListAriaLabel">
+    <qtl-metadata-chiclet
+      role="listitem"
+      backgroundColor="var(--color-variant-muted)"
+      label="variant"
+      [value]="eqtl.variant"
+    />
+    <qtl-metadata-chiclet
+      role="listitem"
+      backgroundColor="var(--color-gene-muted)"
+      label="gene"
+      [value]="eqtl.geneSymbol"
+    />
+    <qtl-metadata-chiclet
+      role="listitem"
+      [backgroundColor]="eqtl.cellClassBackgroundColor"
+      label="cell class"
+      [value]="eqtl.cellClass.name"
+    />
+    <qtl-metadata-chiclet
+      role="listitem"
+      [backgroundColor]="eqtl.cellSubclass.color"
+      textColor="var(--color-white)"
+      label="cell subclass"
+      [value]="eqtl.cellSubclass.name"
+    />
+  </div>
+}
 
 <div role="tablist" class="sidebar-tabs">
   @for (tab of tabs; track tab.value; let i = $index) {
@@ -53,20 +55,25 @@
 >
   @switch (activeTab()) {
     @case ('impact') {
-      <qtl-eqtl-comparison-tool-impact-details [details]="impactDetails" />
-      @if (impactPlotData(); as plotData) {
+      @if (selectedEqtlView(); as eqtl) {
+        <qtl-eqtl-comparison-tool-impact-details [details]="eqtl.impactDetails" />
+        @let plotData = impactPlotData();
         <qtl-eqtl-comparison-tool-impact-boxplot
           class="sidebar-impact-boxplot"
-          [cellSubclass]="cellSubclass"
-          [expressionSummaries]="plotData.expressionSummaries"
+          [cellSubclass]="eqtl.cellSubclass"
+          [expressionSummaries]="plotData?.expressionSummaries ?? []"
+          [isLoading]="!plotData"
         />
         <qtl-eqtl-comparison-tool-impact-forest-plot
           class="sidebar-impact-forest-plot"
-          [selectedCellClassId]="data.cell_class_id"
-          [effectSizes]="plotData.effectSizes"
+          [selectedCellClassId]="eqtl.cellSubclass.cellClassId"
+          [effectSizes]="plotData?.effectSizes ?? []"
+          [isLoading]="!plotData"
         />
+        <!-- TODO: add the remaining impact tab content (EX-73) -->
+      } @else {
+        <p class="sidebar-no-data">{{ noDataMessage }}</p>
       }
-      <!-- TODO: add the remaining impact tab content (EX-73) -->
     }
     @case ('legend') {
       <qtl-eqtl-comparison-tool-legend />

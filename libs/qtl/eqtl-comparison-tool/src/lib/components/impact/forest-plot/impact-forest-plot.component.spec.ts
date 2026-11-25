@@ -1,8 +1,10 @@
 import { By } from '@angular/platform-browser';
 import { ForestPlotDirective } from '@sagebionetworks/explorers/charts-angular';
+import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { CellClassId } from '@sagebionetworks/qtl/config';
 import { coloredCellClassEffectSizesMock } from '@sagebionetworks/qtl/testing';
 import { render, screen, within } from '@testing-library/angular';
+import { impactPlotLoadingLabel } from '../impact-plot-loading';
 import {
   ColoredCellClassEffectSize,
   ImpactForestPlotComponent,
@@ -19,6 +21,7 @@ async function setup(
   effectSizes: ColoredCellClassEffectSize[] = coloredCellClassEffectSizesMock,
 ) {
   const { fixture } = await render(ImpactForestPlotComponent, {
+    providers: [provideLoadingIconColors()],
     componentInputs: { selectedCellClassId, effectSizes },
   });
   const forestPlot = fixture.debugElement
@@ -40,6 +43,13 @@ describe('ImpactForestPlotComponent', () => {
     await setup();
     const figure = screen.getByRole('figure', { name: IMPACT_FOREST_PLOT_TITLE });
     expect(within(figure).getByText(IMPACT_FOREST_PLOT_X_AXIS_TITLE)).toBeVisible();
+  });
+
+  it('keeps the caption but leaves out the x-axis title when there are no effect sizes', async () => {
+    await setup(astrocyte, []);
+    const figure = screen.getByRole('figure', { name: IMPACT_FOREST_PLOT_TITLE });
+    expect(within(figure).getByText(IMPACT_FOREST_PLOT_TITLE)).toBeVisible();
+    expect(within(figure).queryByText(IMPACT_FOREST_PLOT_X_AXIS_TITLE)).toBeNull();
   });
 
   it('lists the cell classes top to bottom alphabetically by full name, as uppercase abbreviations', async () => {
@@ -103,5 +113,18 @@ describe('ImpactForestPlotComponent', () => {
   it('pins its left-aligned tooltips above the hovered point or label', async () => {
     const { forestPlot } = await setup();
     expect(forestPlot.tooltipStyle()).toMatchObject({ pinAbove: true, textAlign: 'left' });
+  });
+
+  it('shows a named loading status in place of the chart while loading, keeping the caption', async () => {
+    const { fixture } = await render(ImpactForestPlotComponent, {
+      providers: [provideLoadingIconColors()],
+      componentInputs: { selectedCellClassId: astrocyte, effectSizes: [], isLoading: true },
+    });
+    expect(
+      screen.getByRole('status', { name: impactPlotLoadingLabel(IMPACT_FOREST_PLOT_TITLE) }),
+    ).toBeVisible();
+    expect(screen.getByRole('figure', { name: IMPACT_FOREST_PLOT_TITLE })).toBeVisible();
+    expect(screen.queryByText(IMPACT_FOREST_PLOT_X_AXIS_TITLE)).toBeNull();
+    expect(fixture.debugElement.query(By.directive(ForestPlotDirective))).toBeNull();
   });
 });

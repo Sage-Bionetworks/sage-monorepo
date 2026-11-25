@@ -3,19 +3,30 @@
   <figcaption class="impact-boxplot-title">
     {{ titlePrefix }} <br />({{ cellSubclass().name }})
   </figcaption>
-  <div
-    sageBoxplot
-    class="impact-boxplot-chart"
-    [style.height.px]="chartHeight"
-    [points]="[]"
-    [summaries]="summaries()"
-    [xAxisCategories]="genotypes()"
-    [laneBackgroundColors]="laneBackgroundColors"
-    [showAxisTicks]="false"
-    [boxplotBoxStyle]="boxplotBoxStyle()"
-    [axisTickLabelStyle]="axisTickLabelStyle"
-    [axisLineStyle]="axisLineStyle"
-    [tooltipStyle]="tooltipStyle"
-    [plotAreaMargins]="plotAreaMargins"
-  ></div>
+  @if (isLoading()) {
+    <div
+      class="impact-boxplot-loading"
+      role="status"
+      [attr.aria-label]="loadingLabel()"
+      [style.height.px]="chartHeight"
+    >
+      <explorers-loading-icon />
+    </div>
+  } @else {
+    <div
+      sageBoxplot
+      class="impact-boxplot-chart"
+      [style.height.px]="chartHeight"
+      [points]="[]"
+      [summaries]="summaries()"
+      [xAxisCategories]="genotypes()"
+      [laneBackgroundColors]="laneBackgroundColors"
+      [showAxisTicks]="false"
+      [boxplotBoxStyle]="boxplotBoxStyle()"
+      [axisTickLabelStyle]="axisTickLabelStyle"
+      [axisLineStyle]="axisLineStyle"
+      [tooltipStyle]="tooltipStyle"
+      [plotAreaMargins]="plotAreaMargins"
+    ></div>
+  }
 </figure>

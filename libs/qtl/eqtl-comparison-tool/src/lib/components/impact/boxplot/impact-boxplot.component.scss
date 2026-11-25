@@ -14,3 +14,7 @@
 .impact-boxplot-title {
   @include mixins.chart-caption;
 }
+
+.impact-boxplot-loading {
+  @include mixins.chart-loading;
+}

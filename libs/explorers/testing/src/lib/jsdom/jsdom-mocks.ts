@@ -47,6 +47,17 @@ export function mockSvgGetBBox(): void {
   }));
 }
 
+/**
+ * jsdom lacks FontFaceSet, which the comparison tool table awaits before measuring column widths
+ * and the charts check before drawing. Stubs it as a set whose fonts have all loaded.
+ */
+export function mockDocumentFonts(): void {
+  mockPrototypeProperty(window.Document.prototype, 'fonts', () => ({
+    configurable: true,
+    get: () => ({ ready: Promise.resolve(), check: () => true }),
+  }));
+}
+
 function mockPrototypeProperty(
   prototype: object,
   property: string,

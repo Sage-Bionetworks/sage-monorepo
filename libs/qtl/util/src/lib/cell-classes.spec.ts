@@ -40,6 +40,7 @@ describe('findCellSubclass', () => {
     expect(findCellSubclass(adaptiveImmuneSubclass)).toEqual({
       name,
       color,
+      cellClassId,
       cellClass: CELL_CLASSES[cellClassId],
     });
   });
@@ -72,6 +73,7 @@ describe('unknownCellSubclass', () => {
     const unknownSubclass = unknownCellSubclass(unlistedCellSubclassId);
     expect(unknownSubclass.name).toBe(unlistedCellSubclassId);
     expect(unknownSubclass.color).toBe(UNKNOWN_CELL_TYPE_COLOR);
+    expect(unknownSubclass.cellClassId).toBe(unlistedCellSubclassId);
     expect(unknownSubclass.cellClass.color).toBe(UNKNOWN_CELL_TYPE_COLOR);
   });
 });

@@ -22,3 +22,18 @@ export const ImmuneCellSelected: Story = {
     effectSizes: coloredCellClassEffectSizesMock,
   },
 };
+
+export const Loading: Story = {
+  args: {
+    selectedCellClassId: 'class_astro',
+    effectSizes: [],
+    isLoading: true,
+  },
+};
+
+export const NoData: Story = {
+  args: {
+    selectedCellClassId: 'class_astro',
+    effectSizes: [],
+  },
+};
