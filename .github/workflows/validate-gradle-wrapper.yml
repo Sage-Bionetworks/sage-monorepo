@@ -1,0 +1,27 @@
+name: Validate Gradle wrapper
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  merge_group:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Gradle wrapper
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      # Runs on every PR (no path filter) so it can be a required status check. The wrapper JAR
+      # is a committed binary that every Gradle job executes, and the distribution and
+      # dependency checksums are verified by that same JAR, so they cannot catch a tampered one.
+      - name: Validate the Gradle wrapper JAR against official Gradle checksums
+        uses: gradle/actions/wrapper-validation@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
