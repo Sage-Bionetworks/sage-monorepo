@@ -10,6 +10,11 @@ import {
 import { TableLazyLoadEvent } from 'primeng/table';
 import { DEFAULT_PAGE_SIZE } from './app-storage.constants';
 
+interface CsvSource {
+  columns: ComparisonToolConfigColumn[];
+  data: Record<string, unknown>[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -51,20 +56,21 @@ export class ComparisonToolHelperService {
     linkExportField: 'link_url' | 'link_text' = 'link_url',
   ): string[][] {
     const exportedColumns = config.columns.filter((col) => col.is_exported !== false);
-    const heatmapColumns = exportedColumns.filter((col) => col.type === 'heat_map');
-    const baseColumns = exportedColumns.filter((col) => col.type !== 'heat_map');
+    const flattened = this.flattenObjectColumns(exportedColumns, data);
+    const heatmapColumns = flattened.columns.filter((col) => col.type === 'heat_map');
+    const baseColumns = flattened.columns.filter((col) => col.type !== 'heat_map');
 
     const heatmapMetrics = heatmapColumns.length
-      ? this.collectHeatmapMetrics(data, heatmapColumns)
+      ? this.collectHeatmapMetrics(flattened.data, heatmapColumns)
       : [];
 
     const headerRow = this.buildHeaderRow(
-      exportedColumns,
+      flattened.columns,
       heatmapMetrics,
       heatmapCategoryColumnName,
     );
 
-    const rows = data.flatMap((item) =>
+    const rows = flattened.data.flatMap((item) =>
       this.buildRows({
         item,
         baseColumns,
@@ -100,6 +106,35 @@ export class ComparisonToolHelperService {
     }
 
     return headerRow;
+  }
+
+  // Flattens a text column of objects, like a location's chr, start and end, into one column per
+  // subfield, so the CSV gets plain values instead of "[object Object]".
+  protected flattenObjectColumns(
+    columns: ComparisonToolConfigColumn[],
+    data: Record<string, unknown>[],
+  ): CsvSource {
+    const splitColumns: ComparisonToolConfigColumn[] = [];
+    const splitData = data.map((item) => ({ ...item }));
+
+    for (const column of columns) {
+      const subfields = column.type === 'text' ? findObjectSubfields(data, column.data_key) : [];
+      if (subfields.length === 0) {
+        splitColumns.push(column);
+        continue;
+      }
+
+      for (const subfield of subfields) {
+        const subfieldDataKey = `${column.data_key}.${subfield}`;
+        splitColumns.push({ ...column, data_key: subfieldDataKey });
+        for (const item of splitData) {
+          const value = item[column.data_key];
+          item[subfieldDataKey] = isPlainObject(value) ? value[subfield] : undefined;
+        }
+      }
+    }
+
+    return { columns: splitColumns, data: splitData };
   }
 
   protected collectHeatmapMetrics(
@@ -220,4 +255,14 @@ export class ComparisonToolHelperService {
       {} as Record<string, string[]>,
     );
   }
+}
+
+// Reads the subfields from the first row that has the object, since a row's value can be null.
+function findObjectSubfields(data: Record<string, unknown>[], dataKey: string): string[] {
+  const firstObject = data.map((item) => item[dataKey]).find(isPlainObject);
+  return firstObject ? Object.keys(firstObject) : [];
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
