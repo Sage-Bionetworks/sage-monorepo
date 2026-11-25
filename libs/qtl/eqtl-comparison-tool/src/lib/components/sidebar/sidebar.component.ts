@@ -11,7 +11,6 @@ import {
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   HttpErrorReportLevelEnum,
-  isNotFoundError,
   LoggerService,
   PlatformService,
   reportHttpError,
@@ -189,12 +188,9 @@ export class SidebarComponent {
     return this.eqtlPhenotypeService.getEqtlPhenotype(toEqtlPhenotypeQuery(eqtl)).pipe(
       map((phenotype) => this.toImpactPlotData(phenotype)),
       catchError((error) => {
-        // Not every eQTL has phenotype data, so a 404 may not be a data error.
         reportHttpError(this.logger, EQTL_PHENOTYPE_ERROR_MESSAGE, {
           error,
-          level: isNotFoundError(error)
-            ? HttpErrorReportLevelEnum.Warn
-            : HttpErrorReportLevelEnum.Error,
+          level: HttpErrorReportLevelEnum.Error,
         });
         return of(NO_IMPACT_PLOT_DATA);
       }),

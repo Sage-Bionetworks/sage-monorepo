@@ -250,24 +250,8 @@ describe('SidebarComponent', () => {
     expect(mockEqtlPhenotypeService.getEqtlPhenotype).not.toHaveBeenCalled();
   });
 
-  it('reports a row with no plot data as a warning and shows the plots without data', async () => {
+  it('reports a row with no plot data (404) as an error and shows the plots without data', async () => {
     const error = buildPhenotypeRequestError(HttpStatusCode.NotFound);
-    const loggerWarn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
-
-    await setup({ phenotypeResponse: throwError(() => error) });
-
-    expect(loggerWarn).toHaveBeenCalledWith(
-      formatHttpErrorReportMessage(EQTL_PHENOTYPE_ERROR_MESSAGE, error),
-      expect.anything(),
-      error,
-    );
-    expect(queryImpactPlots().boxplot).toBeVisible();
-    expect(queryImpactPlots().forestPlot).toBeVisible();
-    expect(getPlotLoadingStatusNames()).toEqual([]);
-  });
-
-  it('reports any other failed plot data request as an error and shows the plots without data', async () => {
-    const error = buildPhenotypeRequestError(HttpStatusCode.ServiceUnavailable);
     const loggerError = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
 
     await setup({ phenotypeResponse: throwError(() => error) });
@@ -277,6 +261,7 @@ describe('SidebarComponent', () => {
       expect.objectContaining({ error }),
     );
     expect(queryImpactPlots().boxplot).toBeVisible();
+    expect(queryImpactPlots().forestPlot).toBeVisible();
     expect(getPlotLoadingStatusNames()).toEqual([]);
   });
 
