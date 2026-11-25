@@ -14,14 +14,15 @@ Java dependencies are managed primarily via the Gradle Version Catalog located a
 
 ### Key Files
 
-| File / Path                                          | Role / Purpose                                                           | Maintenance Notes                                                                       |
-| ---------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| `gradle/libs.versions.toml`                          | Central Gradle Version Catalog (aliases, bundles, plugin & lib versions) | Primary source of truth for versions                                                    |
-| `settings.gradle.kts`                                | Declares included projects & (optionally) plugin management              | Keep aligned with catalog usage                                                         |
-| `build.gradle.kts` (root)                            | Common repositories, shared plugin/application of conventions            | Avoid hard‑coded versions; delegate to catalog                                          |
-| `apps/*/build.gradle.kts`, `libs/*/build.gradle.kts` | Module build scripts consuming catalog aliases                           | Should not redefine versions directly                                                   |
-| `gradle.properties`                                  | JVM & Gradle configuration (memory, flags, toolchain hints)              | Version bumps rarely here                                                               |
-| `buildSrc/`                                          | Local convention plugins (Java, Spring Boot, Lombok, Jacoco, publishing) | Contains a few hard‑coded versions (JUnit, Lombok, Jacoco) that must be manually synced |
+| File / Path                                          | Role / Purpose                                                           | Maintenance Notes                                                                                  |
+| ---------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| `gradle/libs.versions.toml`                          | Central Gradle Version Catalog (aliases, bundles, plugin & lib versions) | Primary source of truth for versions                                                               |
+| `settings.gradle.kts`                                | Declares included projects & (optionally) plugin management              | Keep aligned with catalog usage                                                                    |
+| `build.gradle.kts` (root)                            | Common repositories, shared plugin/application of conventions            | Avoid hard‑coded versions; delegate to catalog                                                     |
+| `apps/*/build.gradle.kts`, `libs/*/build.gradle.kts` | Module build scripts consuming catalog aliases                           | Should not redefine versions directly                                                              |
+| `gradle.properties`                                  | JVM & Gradle configuration (memory, flags, toolchain hints)              | Version bumps rarely here                                                                          |
+| `gradle/verification-metadata.xml`                   | SHA-256 checksums of every downloaded dependency and plugin              | Regenerate after every dependency change (see [Dependency Verification](#dependency-verification)) |
+| `buildSrc/`                                          | Local convention plugins (Java, Spring Boot, Lombok, Jacoco, publishing) | Contains a few hard‑coded versions (JUnit, Lombok, Jacoco) that must be manually synced            |
 
 !!! note "buildSrc maintenance"
 
@@ -116,13 +117,17 @@ Typical triggers for an update:
 3. Manually synchronize any hard‑coded versions in `buildSrc` (JUnit, JUnit Platform launcher, Lombok, Jacoco).
    Update those literals to match the catalog (or the selected new version) and add an inline comment if deliberate divergence.
 4. Rerun `./gradlew dependencyUpdates --no-parallel` to confirm that the updates have been applied.
-5. Run a clean build:
+5. Record the checksums of the new artifacts (see [Dependency Verification](#dependency-verification)):
+   ```bash
+   ./gradlew --write-verification-metadata sha256 help
+   ```
+6. Run a clean build:
    ```bash
    ./gradlew clean build
    ```
-6. Run tests selectively if change is scoped, otherwise full test suite.
-7. Commit with message: `chore(deps): bump <lib> to <version>`.
-8. Push branch & open/refresh PR.
+7. Run tests selectively if change is scoped, otherwise full test suite.
+8. Commit with message: `chore(deps): bump <lib> to <version>`.
+9. Push branch & open/refresh PR.
 
 ### Batching Patch & Minor Updates
 
@@ -165,6 +170,7 @@ Batching several low‑risk version bumps into a single PR reduces review overhe
 - [ ] Only patch/minor versions included
 - [ ] `gradle/libs.versions.toml` updated & tidy (no orphaned commented versions)
 - [ ] `buildSrc` literals (JUnit / Jacoco / Lombok) synced if touched
+- [ ] `gradle/verification-metadata.xml` regenerated and its diff reviewed
 - [ ] `./gradlew dependencyUpdates --no-parallel` now shows only pending majors (or nothing relevant)
 - [ ] `./gradlew clean build` passes
 - [ ] Targeted / affected integration tests run (if any)
@@ -197,6 +203,32 @@ Batching several low‑risk version bumps into a single PR reduces review overhe
 3. Run targeted tests + any security scan tasks.
 4. Merge promptly after review.
 5. Include mitigation note in release summary.
+
+## Dependency Verification
+
+Gradle [dependency verification](https://docs.gradle.org/current/userguide/dependency_verification.html) checks every downloaded dependency, plugin and POM against the SHA-256 checksums in `gradle/verification-metadata.xml`. It covers the projects and `buildSrc`, and it re-checks files already in the local Gradle cache, not only fresh downloads.
+
+This is what makes the CI Gradle cache safe to share between jobs: a tampered jar restored from the cache fails the build instead of running. A build fails with `Dependency verification failed` when an artifact is missing from the file or its checksum does not match.
+
+### After Changing Dependencies
+
+Any change that pulls in a new artifact (version bump, new library, new plugin) must update the file in the same PR:
+
+```bash
+./gradlew --write-verification-metadata sha256 help
+```
+
+`help` resolves every configuration Gradle can discover. Some artifacts are resolved only while a task runs (e.g. the JUnit Platform launcher or the JaCoCo agent during `test`). If a later build still fails verification, rerun the command with that task instead of `help`, e.g. `./gradlew --write-verification-metadata sha256 test`.
+
+Review the diff before committing:
+
+- New `<component>` entries should match the dependencies you changed and their transitive dependencies.
+- A changed checksum for a version that did not change is a red flag. Do not commit it; investigate where the artifact came from.
+- Old entries are not removed automatically. To prune them, move the file aside, regenerate it, and compare.
+
+!!! warning "Never disable verification to unblock a build"
+
+    Do not delete entries, add broad `<trust>` rules, or switch to `--dependency-verification lenient` or `off` in committed config or CI. If a checksum mismatch looks legitimate (e.g. an artifact republished upstream), confirm it against the repository before recording it.
 
 ## Tooling & Commands
 
@@ -340,6 +372,7 @@ Track key metrics (startup time, heap, request latency). For significant framewo
 
 - [ ] Versions updated only in `libs.versions.toml`
 - [ ] No stray version strings left in module `build.gradle.kts`
+- [ ] `gradle/verification-metadata.xml` changes match the dependency changes (no unexplained new groups or changed checksums for unchanged versions)
 - [ ] All tests pass locally/CI
 - [ ] Release notes/migration doc referenced (for majors)
 - [ ] No forced resolutions added without justification
