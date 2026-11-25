@@ -45,6 +45,9 @@ jobs:
 
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
+        with:
+          # Release images ship to production, so build them from fresh, verified downloads only.
+          gradle-cache: none
 
         # TODO: Identify the projects that actually need to be prepared. Here I'm not expecting any
         # affected project since this workflow does not affect projects. For now I'm keeping the

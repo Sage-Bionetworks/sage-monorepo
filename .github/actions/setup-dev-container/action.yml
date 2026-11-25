@@ -5,6 +5,12 @@ inputs:
     description: 'The dev container user.'
     required: false
     default: 'ubuntu'
+  gradle-cache:
+    description: >-
+      How to use the Gradle dependency cache: 'read-write' restores and saves it, 'read-only' only
+      restores it, and 'none' skips it. Runs triggered by pull_request_target never save it.
+    required: false
+    default: 'read-write'
 outputs:
   affected_projects:
     description: 'The list of affected Nx projects as a comma separated string.'
@@ -37,40 +43,54 @@ runs:
     #     key: ${{ runner.os }}-venv-${{ hashFiles('**/uv.lock') }}
 
     # Nx builds the Gradle project graph in every job, so without this cache each job downloads the
-    # Gradle distribution and the buildSrc plugins, and parallel jobs get rate limited (HTTP 429).
-    # Lock files and the local build cache are machine-specific and excluded.
+    # buildSrc plugins, and parallel jobs get rate limited (HTTP 429).
+    # Only modules-2 (downloaded dependencies) is cached because gradle/verification-metadata.xml
+    # re-checks those on every build. The unpacked wrapper distribution (checksum-checked only on
+    # download) and Gradle's derived caches (compiled scripts, transformed jars) are never verified,
+    # so they are rebuilt in every job instead.
+    # pull_request_target runs fork PR code in the base branch's cache scope, so it is capped at
+    # read-only: saving there would let a PR plant files that main and release builds restore.
     - name: Define the Gradle cache
       id: gradle-cache
       shell: bash
       env:
-        CACHE_KEY_PREFIX: ${{ runner.os }}-gradle-
-        CACHE_KEY_HASH: ${{ hashFiles('**/*.gradle.kts', 'gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
+        REQUESTED_MODE: ${{ inputs.gradle-cache }}
+        EVENT_NAME: ${{ github.event_name }}
+        CACHE_KEY_PREFIX: ${{ runner.os }}-gradle-modules-
+        CACHE_KEY_HASH: ${{ hashFiles('**/*.gradle.kts', 'gradle/libs.versions.toml', 'gradle/verification-metadata.xml') }}
       run: |
+        case "${REQUESTED_MODE}" in
+          read-write | read-only | none) mode="${REQUESTED_MODE}" ;;
+          *)
+            echo "::error title=Invalid gradle-cache input::Expected read-write, read-only or none, got '${REQUESTED_MODE}'."
+            exit 1
+            ;;
+        esac
+        if [[ "${EVENT_NAME}" == "pull_request_target" && "${mode}" == "read-write" ]]; then
+          mode="read-only"
+        fi
+        echo "Gradle cache mode: ${mode}"
         {
+          echo "mode=${mode}"
           echo "key-prefix=${CACHE_KEY_PREFIX}"
           echo "key=${CACHE_KEY_PREFIX}${CACHE_KEY_HASH}"
           echo "paths<<EOF"
-          echo "/tmp/.gradle/caches"
-          echo "/tmp/.gradle/wrapper"
-          echo "!/tmp/.gradle/caches/build-cache-*"
-          echo "!/tmp/.gradle/caches/*/plugin-resolution"
-          echo "!/tmp/.gradle/caches/**/*.lock"
+          echo "/tmp/.gradle/caches/modules-2"
+          echo "!/tmp/.gradle/caches/modules-2/*.lock"
           echo "!/tmp/.gradle/caches/modules-2/gc.properties"
           echo "EOF"
         } >> "${GITHUB_OUTPUT}"
 
     - name: Restore and save the Gradle cache
-      if: github.event_name != 'pull_request_target'
+      if: steps.gradle-cache.outputs.mode == 'read-write'
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ${{ steps.gradle-cache.outputs.paths }}
         key: ${{ steps.gradle-cache.outputs.key }}
         restore-keys: ${{ steps.gradle-cache.outputs.key-prefix }}
 
-    # pull_request_target runs fork PR code in the base branch's cache scope, so saving here would
-    # let a PR plant artifacts that main and release builds later restore.
     - name: Restore the Gradle cache (read-only)
-      if: github.event_name == 'pull_request_target'
+      if: steps.gradle-cache.outputs.mode == 'read-only'
       uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ${{ steps.gradle-cache.outputs.paths }}
