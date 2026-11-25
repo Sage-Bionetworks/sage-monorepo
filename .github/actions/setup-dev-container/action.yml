@@ -36,15 +36,46 @@ runs:
     #       **/.venv
     #     key: ${{ runner.os }}-venv-${{ hashFiles('**/uv.lock') }}
 
-    # - name: Set up Gradle cache
-    #   uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c #v3.5.0
-    #   with:
-    #     path: |
-    #       /tmp/.gradle/caches
-    #       /tmp/.gradle/wrapper
-    #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-gradle-
+    # Nx builds the Gradle project graph in every job, so without this cache each job downloads the
+    # Gradle distribution and the buildSrc plugins, and parallel jobs get rate limited (HTTP 429).
+    # Lock files and the local build cache are machine-specific and excluded.
+    - name: Define the Gradle cache
+      id: gradle-cache
+      shell: bash
+      env:
+        CACHE_KEY_PREFIX: ${{ runner.os }}-gradle-
+        CACHE_KEY_HASH: ${{ hashFiles('**/*.gradle.kts', 'gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
+      run: |
+        {
+          echo "key-prefix=${CACHE_KEY_PREFIX}"
+          echo "key=${CACHE_KEY_PREFIX}${CACHE_KEY_HASH}"
+          echo "paths<<EOF"
+          echo "/tmp/.gradle/caches"
+          echo "/tmp/.gradle/wrapper"
+          echo "!/tmp/.gradle/caches/build-cache-*"
+          echo "!/tmp/.gradle/caches/*/plugin-resolution"
+          echo "!/tmp/.gradle/caches/**/*.lock"
+          echo "!/tmp/.gradle/caches/modules-2/gc.properties"
+          echo "EOF"
+        } >> "${GITHUB_OUTPUT}"
+
+    - name: Restore and save the Gradle cache
+      if: github.event_name != 'pull_request_target'
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ steps.gradle-cache.outputs.paths }}
+        key: ${{ steps.gradle-cache.outputs.key }}
+        restore-keys: ${{ steps.gradle-cache.outputs.key-prefix }}
+
+    # pull_request_target runs fork PR code in the base branch's cache scope, so saving here would
+    # let a PR plant artifacts that main and release builds later restore.
+    - name: Restore the Gradle cache (read-only)
+      if: github.event_name == 'pull_request_target'
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ steps.gradle-cache.outputs.paths }}
+        key: ${{ steps.gradle-cache.outputs.key }}
+        restore-keys: ${{ steps.gradle-cache.outputs.key-prefix }}
 
     - name: Install the Dev Container CLI
       shell: bash
